@@ -1,158 +1,75 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard Admin</title>
-    <style>
-        /* ===== Tema Biru Pastel Cute & Modern ===== */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(180deg, #d8eaff 0%, #f5faff 100%);
-            margin: 0;
-            padding: 0;
-            animation: fadeIn 1s ease-in;
-        }
+@extends('layouts.app')
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+@section('title', 'Dashboard Admin Kesehatan Desa')
 
-        header {
-            background: linear-gradient(135deg, #69b9ff, #9dd2ff);
-            color: white;
-            padding: 25px 10px;
-            text-align: center;
-            font-size: 1.4em;
-            font-weight: 600;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+@section('content')
+<div class="container">
+  <div class="text-center mb-4">
+    <h2 class="fw-bold text-primary">Selamat Datang, Administrator 🌤️</h2>
+    <p class="text-muted">Berikut ringkasan data kegiatan kesehatan desa bulan ini:</p>
+  </div>
 
-        .container {
-            margin: 60px auto;
-            padding: 40px;
-            max-width: 850px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(120,180,255,0.2);
-            text-align: center;
-            animation: slideIn 0.8s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1 {
-            color: #78b8f5; /* 🌸 Soft blue */
-            margin-bottom: 10px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        p {
-            color: #5a6b89;
-            font-size: 1em;
-            margin-bottom: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .emoji {
-            font-size: 1.3em;
-        }
-
-        .button-group {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        a.btn {
-            display: inline-block;
-            text-decoration: none;
-            color: white;
-            background: linear-gradient(135deg, #5ea8ff, #8ac8ff);
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-size: 0.95em;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        a.btn:hover {
-            background: linear-gradient(135deg, #4e9eff, #78bfff);
-            transform: translateY(-3px);
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 115px; /* 🔼 dinaikkan sedikit agar jarak bawah pas */
-            padding-bottom: 30px;
-            color: #6f7b8f;
-            font-size: 0.9em;
-        }
-
-        .emoji-blue {
-            color: #6eb8ff;
-        }
-
-        /* Efek animasi transisi ke halaman jadwal */
-        .btn-transition {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-transition::after {
-            content: "";
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.3);
-            transition: left 0.5s ease;
-        }
-
-        .btn-transition:hover::after {
-            left: 100%;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        💙 Dashboard Admin Kesehatan Desa Sehat
-    </header>
-
-    <div class="container">
-        <h1>
-            Selamat Datang, Airaa!
-            <!-- 🔵 Ikon Kesehatan -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="#6eb8ff">
-                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 11h-4v4h-2v-4H7v-2h4V8h2v4h4v2z"/>
-            </svg>
-        </h1>
-
-        <p>
-            Kelola dan pantau jadwal kegiatan kesehatan masyarakat dengan penuh semangat dan kepedulian
-            <span class="emoji">🧑‍⚕️</span>
-        </p>
-
-        <div class="button-group">
-            <a href="{{ url('/admin/jadwal') }}" class="btn btn-transition">📅 Lihat Jadwal Kesehatan</a>
-            <a href="{{ url('/auth') }}" class="btn btn-transition">↩ Kembali ke Login</a>
+  <!-- Statistik -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm border-0" style="border-radius: 15px;">
+        <div class="card-body">
+          <h4 class="text-primary">{{ $totalWarga ?? 12 }}</h4>
+          <p class="text-muted mb-0">Jadwal Kegiatan</p>
         </div>
+      </div>
     </div>
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm border-0" style="border-radius: 15px;">
+        <div class="card-body">
+          <h4 class="text-primary">{{ $totalMedis ?? 8 }}</h4>
+          <p class="text-muted mb-0">Tenaga Medis Aktif</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm border-0" style="border-radius: 15px;">
+        <div class="card-body">
+          <h4 class="text-primary">{{ $laporanBaru ?? 3 }}</h4>
+          <p class="text-muted mb-0">Laporan Baru</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <footer>
-        © {{ date('Y') }} Sistem Kesehatan Desa — Tetap Sehat & Tebarkan Kasih <span class="emoji-blue">💙</span>
-    </footer>
-</body>
-</html>
-
+  <!-- Jadwal Kesehatan Terdekat -->
+  <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+    <div class="card-header text-white fw-semibold" style="background-color:#5ea8ff;">
+      <i class="bi bi-calendar-event me-2"></i> Jadwal Kesehatan Terdekat
+    </div>
+    <div class="card-body p-0">
+      <table class="table mb-0 text-center align-middle">
+        <thead style="background:#e8f2ff;">
+          <tr>
+            <th>Tanggal</th>
+            <th>Kegiatan</th>
+            <th>Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2025-10-05</td>
+            <td>Pemeriksaan Balita & Imunisasi</td>
+            <td>Cek berat badan, tinggi, dan imunisasi campak.</td>
+          </tr>
+          <tr>
+            <td>2025-10-12</td>
+            <td>Penyuluhan Gizi Ibu Hamil</td>
+            <td>Materi gizi seimbang untuk ibu hamil.</td>
+          </tr>
+          <tr>
+            <td>2025-10-19</td>
+            <td>Pemeriksaan Lansia</td>
+            <td>Pemeriksaan tekanan darah dan gula darah.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+@endsection

@@ -46,7 +46,37 @@ class AuthController extends Controller
         }
     }
 
-    // Fungsi lain (kosong, bisa kamu isi nanti)
+    /**
+     * Menampilkan form register.
+     */
+    public function registerForm()
+    {
+        return view('register-form');
+    }
+
+    /**
+     * Memproses data register.
+     */
+    public function register(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'username' => 'required|min:3',
+            'password' => 'required|min:3|confirmed',
+        ], [
+            'username.required' => 'Username wajib diisi.',
+            'username.min' => 'Username minimal 3 karakter.',
+            'password.required' => 'Password wajib diisi.',
+            'password.min' => 'Password minimal 3 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.'
+        ]);
+
+        // Simulasi penyimpanan data (belum menggunakan database)
+        // Nanti bisa diganti dengan model User
+        return redirect('/auth')->with('success', 'Registrasi berhasil! Silakan login.');
+    }
+
+    // Fungsi lain (kosong, bisa diisi nanti)
     public function create() {}
     public function store(Request $request) {}
     public function show(string $id) {}
@@ -54,3 +84,4 @@ class AuthController extends Controller
     public function update(Request $request, string $id) {}
     public function destroy(string $id) {}
 }
+

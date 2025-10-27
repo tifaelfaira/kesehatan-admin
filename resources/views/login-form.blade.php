@@ -48,7 +48,6 @@
             box-shadow: 0 5px 10px rgba(120, 160, 255, 0.3);
         }
 
-        /* warna tulisan "Form Login" lebih soft */
         h3 {
             color: #7ab6ff;
             font-weight: 600;
@@ -98,7 +97,17 @@
             color: #6da8ff;
         }
 
-        /* efek bubble lembut */
+        a.register-link {
+            color: #5a9cff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a.register-link:hover {
+            text-decoration: underline;
+            color: #3a86ff;
+        }
+
         .bubble {
             position: absolute;
             background: rgba(173, 209, 255, 0.5);
@@ -115,7 +124,7 @@
     </style>
 </head>
 <body>
-    <!-- hiasan bubble -->
+    <!-- Bubble hiasan -->
     <div class="bubble" style="width:50px; height:50px; left:10%; bottom:15%; animation-delay: 0s;"></div>
     <div class="bubble" style="width:70px; height:70px; right:15%; top:20%; animation-delay: 2s;"></div>
     <div class="bubble" style="width:30px; height:30px; left:40%; top:10%; animation-delay: 4s;"></div>
@@ -150,7 +159,11 @@
                 <input type="password" name="password" class="form-control">
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+
+            <p class="mb-0">Belum punya akun? 
+                <a href="{{ url('/auth/register') }}" class="register-link">Daftar di sini</a>
+            </p>
         </form>
 
         <footer>© {{ date('Y') }} Sistem Kesehatan Desa <i>💙</i></footer>
