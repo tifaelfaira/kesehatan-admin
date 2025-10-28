@@ -11,6 +11,8 @@ use App\Http\Controllers\JadwalKesehatanController;
 use App\Http\Controllers\WargaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ModulAController;
+use App\Http\Controllers\ModulBController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,3 +75,26 @@ Route::post('/logout', function () {
     Auth::logout();
     return redirect('/auth');
 })->name('logout');
+
+Route::get('/', function () {
+    return redirect('/login');
+});
+
+// ====================== MODUL ADMIN ======================
+Route::prefix('admin')->group(function () {
+    Route::view('/modul-a', 'admin.modul-a')->name('admin.modul-a');
+    Route::view('/modul-b', 'admin.modul-b')->name('admin.modul-b');
+});
+
+
+Route::prefix('admin')->group(function () {
+    Route::get('/modul-a', function () {
+        return view('admin.modul-a');
+    });
+
+    Route::get('/modul-b', function () {
+        return view('admin.modul-b');
+    });
+});
+
+Route::resource('/admin/modul-a', ModulAController::class);
