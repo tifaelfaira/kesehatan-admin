@@ -16,6 +16,6 @@ class DashboardController extends Controller
         $wargaTerbaru = Warga::latest()->take(5)->get();
         $jadwalTerbaru = JadwalKesehatan::latest()->take(5)->get();
 
-        return view('admin.dashboard', compact('totalWarga', 'totalJadwal', 'wargaTerbaru', 'jadwalTerbaru'));
+        return view('dashboard', compact('totalWarga', 'totalJadwal', 'wargaTerbaru', 'jadwalTerbaru'));
     }
 }

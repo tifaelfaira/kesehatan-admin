@@ -5,35 +5,24 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\JadwalKesehatan;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JadwalKesehatanController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WargaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ModulAController;
-use App\Http\Controllers\ModulBController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-| File ini berisi semua route utama aplikasi Laravel kamu.
-| Gunakan route yang rapi agar mudah dipahami dan tidak tumpang tindih.
-|--------------------------------------------------------------------------
 */
-
-// Route default (mengarah ke halaman login atau dashboard)
-Route::get('/', function () {
-    return redirect('/admin/dashboard');
-});
 
 // ===============================
 // AUTH (Login)
 // ===============================
 Route::prefix('auth')->group(function () {
-    Route::get('/', [AuthController::class, 'index'])->name('auth.index'); // Form login
-    Route::post('/login', [AuthController::class, 'login'])->name('auth.login'); // Proses login
+    Route::get('/', [AuthController::class, 'index'])->name('auth.index');
+    Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
     Route::get('/register', [AuthController::class, 'registerForm'])->name('auth.registerForm');
     Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
 });
@@ -42,26 +31,17 @@ Route::prefix('auth')->group(function () {
 // ADMIN
 // ===============================
 Route::prefix('admin')->group(function () {
-    // Dashboard utama
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    // Jadwal Kesehatan
-    Route::get('/jadwal', [JadwalKesehatan::class, 'index'])->name('admin.jadwal');
-
-    // Resource lainnya
+    // Resources - PASTIKAN SEMUA DI DALAM PREFIX ADMIN
     Route::resource('jadwal', JadwalKesehatanController::class);
     Route::resource('warga', WargaController::class);
-    Route::resource('user', UserController::class);
-    Route::resource('users', UserController::class)->names('admin.users');
+    Route::resource('user', UserController::class); // INI HARUS DI DALAM PREFIX ADMIN
 });
 
 // ===============================
-// Dashboard (duplikat dihapus, cukup satu saja)
-// ===============================
-Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-
-// ===============================
-// LOGOUT (PENTING UNTUK DARI SIDEBAR)
+// LOGOUT
 // ===============================
 Route::get('/logout', function (Request $request) {
     Auth::logout();
@@ -70,31 +50,14 @@ Route::get('/logout', function (Request $request) {
     return redirect('/auth')->with('success', 'Anda berhasil logout.');
 })->name('logout');
 
-
 Route::post('/logout', function () {
     Auth::logout();
     return redirect('/auth');
 })->name('logout');
 
+// ===============================
+// DEFAULT ROUTE
+// ===============================
 Route::get('/', function () {
-    return redirect('/login');
+    return view('pages.auth.login-form');
 });
-
-// ====================== MODUL ADMIN ======================
-Route::prefix('admin')->group(function () {
-    Route::view('/modul-a', 'admin.modul-a')->name('admin.modul-a');
-    Route::view('/modul-b', 'admin.modul-b')->name('admin.modul-b');
-});
-
-
-Route::prefix('admin')->group(function () {
-    Route::get('/modul-a', function () {
-        return view('admin.modul-a');
-    });
-
-    Route::get('/modul-b', function () {
-        return view('admin.modul-b');
-    });
-});
-
-Route::resource('/admin/modul-a', ModulAController::class);

@@ -10,12 +10,12 @@ class JadwalKesehatanController extends Controller
     public function index()
     {
         $jadwal = JadwalKesehatan::latest()->get();
-        return view('jadwal_kesehatan.index', compact('jadwal'));
+        return view('pages.jadwal_kesehatan.index', compact('jadwal'));
     }
 
     public function create()
     {
-        return view('jadwal_kesehatan.create');
+        return view('pages.jadwal_kesehatan.create');
     }
 
     public function store(Request $request)
@@ -33,7 +33,7 @@ class JadwalKesehatanController extends Controller
 
     public function edit(JadwalKesehatan $jadwal)
     {
-        return view('jadwal_kesehatan.edit', compact('jadwal'));
+        return view('pages.jadwal_kesehatan.edit', compact('jadwal'));
     }
 
     public function update(Request $request, JadwalKesehatan $jadwal)

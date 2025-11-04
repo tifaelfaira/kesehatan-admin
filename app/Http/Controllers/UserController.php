@@ -11,14 +11,14 @@ class UserController extends Controller
     // Tampilkan semua user
     public function index()
     {
-        $users = User::all();
-        return view('admin.user.index', compact('users'));
+        $users = User::all(); // Ubah dari $user menjadi $users
+        return view('pages.user.index', compact('users'));
     }
 
     // Form tambah user
     public function create()
     {
-        return view('admin.user.create');
+        return view('pages.user.create');
     }
 
     // Simpan user baru
@@ -26,7 +26,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|min:3',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:users,email', // Perbaiki: users (bukan user)
             'password' => 'required|min:6',
         ]);
 
@@ -36,13 +36,13 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan!');
+        return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan!');
     }
 
     // Form edit user
     public function edit(User $user)
     {
-        return view('admin.user.edit', compact('user'));
+        return view('pages.user.edit', compact('user'));
     }
 
     // Update user
@@ -50,7 +50,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|min:3',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'required|email|unique:users,email,' . $user->id, // Perbaiki: users (bukan user)
             'password' => 'nullable|min:6',
         ]);
 
@@ -62,13 +62,13 @@ class UserController extends Controller
                 : $user->password,
         ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'Data user berhasil diperbarui!');
+        return redirect()->route('user.index')->with('success', 'Data user berhasil diperbarui!');
     }
 
     // Hapus user
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus!');
+        return redirect()->route('user.index')->with('success', 'User berhasil dihapus!');
     }
 }

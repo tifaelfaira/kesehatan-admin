@@ -9,7 +9,7 @@ class Warga extends Model
 {
     use HasFactory;
 
-    protected $table = 'warga';
+    protected $table = 'warga'; // Pastikan ini ada
 
     protected $fillable = [
         'nama',
@@ -21,4 +21,3 @@ class Warga extends Model
         'rt_rw',
     ];
 }
-
