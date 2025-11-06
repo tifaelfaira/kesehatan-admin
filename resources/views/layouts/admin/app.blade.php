@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   @include('layouts.admin.header')
-  @include('layouts.admin.css')
+   @include('layouts.admin.css') 
 </head>
 <body>
 
