@@ -20,7 +20,7 @@
 
       <div class="dropdown">
         <div class="navbar-profile dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="https://i.pravatar.cc/80?img=68" alt="Foto Admin">
+           <img src="{{ asset('assets/images/aira.jpg') }}" alt="Foto Admin" class="profile-img">
           <span>{{ Auth::user()->name ?? 'Roujwa Tifaelfaira' }}</span>
         </div>
         <ul class="dropdown-menu dropdown-menu-end shadow-sm">

@@ -7,11 +7,11 @@
             </h4>
         </div>
 
-        <!-- Profile Section -->
+       <!-- Profile Section -->
         <div class="profile-section">
             <div class="profile-badge-wrapper">
                 <span class="notif-badge">3</span>
-                <img src="https://i.pravatar.cc/80?img=68" alt="Foto Admin" class="profile-img">
+                <img src="{{ asset('assets/images/aira.jpg') }}" alt="Foto Admin" class="profile-img">
             </div>
             <h6 class="profile-name">{{ Auth::user()->name ?? 'Roujwa Tifaelfaira' }}</h6>
             <small class="profile-role">Admin Kesehatan</small>
