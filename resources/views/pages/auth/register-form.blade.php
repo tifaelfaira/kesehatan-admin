@@ -41,6 +41,8 @@
             box-shadow: 0 10px 30px rgba(142, 179, 255, 0.25);
             overflow: hidden;
             animation: floatUp 0.8s ease-out;
+            position: relative;
+            z-index: 2;
         }
 
         @keyframes floatUp {
@@ -75,6 +77,11 @@
             animation: float 6s ease-in-out infinite;
         }
 
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
         .logo-icon {
             font-size: 35px;
             color: white;
@@ -102,7 +109,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
         }
 
         .register-header {
@@ -124,35 +131,38 @@
         }
 
         .form-control {
-            border-radius: 10px;
-            border: 1px solid #cbdcff;
+            border-radius: 12px;
+            border: 1.5px solid #e3eeff;
             box-shadow: none;
             transition: all 0.3s ease;
-            padding: 12px 15px;
+            padding: 14px 16px;
             margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
+            font-size: 14px;
         }
 
         .form-control:focus {
             border-color: #8cbfff;
-            box-shadow: 0 0 5px rgba(140, 191, 255, 0.3);
+            box-shadow: 0 0 8px rgba(140, 191, 255, 0.3);
             background: white;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, #63aaff, #92c8ff);
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: 500;
             transition: 0.3s;
-            padding: 12px;
+            padding: 14px;
             font-size: 16px;
-            margin-top: 10px;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(99, 170, 255, 0.3);
         }
 
         .btn-primary:hover {
             background: linear-gradient(135deg, #559fff, #7fc0ff);
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 170, 255, 0.4);
         }
 
         a.login-link {
@@ -167,21 +177,84 @@
         }
 
         footer {
-            font-size: 0.9em;
+            font-size: 0.85em;
             color: #6a7aa6;
-            margin-top: 20px;
+            margin-top: 25px;
             text-align: center;
         }
 
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8cbfff;
+            z-index: 5;
+            font-size: 16px;
+        }
+
+        /* GELEMBUNG TIPIS DI BACKGROUND */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            animation: floatBubble 20s ease-in-out infinite;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes floatBubble {
+            0% { 
+                transform: translateY(0px) translateX(0px);
+                opacity: 0.3;
+            }
+            25% { 
+                transform: translateY(-25px) translateX(10px);
+                opacity: 0.5;
+            }
+            50% { 
+                transform: translateY(-15px) translateX(-8px);
+                opacity: 0.2;
+            }
+            75% { 
+                transform: translateY(-20px) translateX(5px);
+                opacity: 0.4;
+            }
+            100% { 
+                transform: translateY(0px) translateX(0px);
+                opacity: 0.3;
+            }
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .register-container {
                 flex-direction: column;
                 width: 95%;
             }
+
+            .brand-section {
+                padding: 40px 30px;
+            }
+
+            .register-section {
+                padding: 40px 30px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Gelembung Tipis di Background -->
+    <div class="bubble" style="width:70px; height:70px; top:20%; left:10%; animation-delay: 0s;"></div>
+    <div class="bubble" style="width:50px; height:50px; bottom:25%; right:12%; animation-delay: 5s;"></div>
+    <div class="bubble" style="width:85px; height:85px; top:30%; right:15%; animation-delay: 10s;"></div>
+    <div class="bubble" style="width:60px; height:60px; bottom:20%; left:8%; animation-delay: 15s;"></div>
+
     <div class="register-container">
         <!-- Brand Section -->
         <div class="brand-section">
@@ -223,6 +296,11 @@
                 </div>
 
                 <div class="input-group">
+                    <input type="email" name="email" class="form-control" placeholder="Email" value="{{ old('email') }}" required>
+                    <i class="bi bi-envelope input-icon"></i>
+                </div>
+
+                <div class="input-group">
                     <input type="password" name="password" class="form-control" placeholder="Password" required>
                     <i class="bi bi-lock input-icon"></i>
                 </div>
@@ -237,8 +315,9 @@
                 </button>
             </form>
 
-            <div class="text-center mt-3">
-                <p class="mb-0">Sudah punya akun?
+            <div class="text-center mt-4">
+                <p class="mb-0" style="color: #6a7aa6; font-size: 14px;">
+                    Sudah punya akun?
                     <a href="{{ url('/auth') }}" class="login-link">Login di sini</a>
                 </p>
             </div>
