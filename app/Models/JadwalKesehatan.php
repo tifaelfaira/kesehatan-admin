@@ -15,4 +15,11 @@ class JadwalKesehatan extends Model
         'keterangan',
         'lokasi',
     ];
+
+    // 🔗 RELASI: 1 Jadwal -> Banyak Layanan Posyandu
+    public function layanan()
+    {
+        return $this->hasMany(LayananPosyandu::class, 'jadwal_id');
+    }
 }
+

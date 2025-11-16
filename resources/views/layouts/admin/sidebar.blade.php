@@ -7,7 +7,7 @@
             </h4>
         </div>
 
-       <!-- Profile Section -->
+        <!-- Profile Section -->
         <div class="profile-section">
             <div class="profile-badge-wrapper">
                 <span class="notif-badge">3</span>
@@ -21,9 +21,11 @@
 
         <!-- Navigation Menu -->
         <div class="sidebar-menu">
+
             <!-- DASHBOARD -->
             <div class="menu-item">
-                <a href="{{ url('/admin/dashboard') }}" class="menu-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                <a href="{{ url('/admin/dashboard') }}" 
+                   class="menu-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
                     <i class="bi bi-house"></i>
                     <span>Dashboard</span>
                 </a>
@@ -32,8 +34,10 @@
             <!-- FITUR UTAMA -->
             <div class="menu-section">
                 <small class="section-label">Fitur Utama</small>
+
                 <div class="menu-item">
-                    <a href="{{ url('/admin/jadwal') }}" class="menu-link {{ request()->is('admin/jadwal*') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/jadwal') }}" 
+                       class="menu-link {{ request()->is('admin/jadwal*') ? 'active' : '' }}">
                         <i class="bi bi-calendar-check"></i>
                         <span>Jadwal Kesehatan</span>
                     </a>
@@ -43,27 +47,43 @@
             <!-- MASTER DATA -->
             <div class="menu-section">
                 <small class="section-label">Master Data</small>
+
                 <div class="menu-item">
-                    <a href="{{ url('/admin/user') }}" class="menu-link {{ request()->is('admin/user*') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/user') }}" 
+                       class="menu-link {{ request()->is('admin/user*') ? 'active' : '' }}">
                         <i class="bi bi-person-badge"></i>
                         <span>Data User</span>
                     </a>
                 </div>
+
                 <div class="menu-item">
-                    <a href="{{ url('/admin/warga') }}" class="menu-link {{ request()->is('admin/warga*') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/warga') }}" 
+                       class="menu-link {{ request()->is('admin/warga*') ? 'active' : '' }}">
                         <i class="bi bi-people"></i>
                         <span>Data Warga</span>
                     </a>
                 </div>
+
+                <!-- MENU LAYANAN POSYANDU FIX -->
+                <div class="menu-item">
+                    <a href="{{ route('admin.layanan-posyandu.index') }}"
+                       class="menu-link {{ request()->is('admin/layanan-posyandu*') ? 'active' : '' }}">
+                        <i class="bi bi-hospital"></i>
+                        <span>Layanan Posyandu</span>
+                    </a>
+                </div>
+
             </div>
 
             <!-- LAPORAN -->
             <div class="menu-item">
-                <a href="{{ url('/admin/laporan') }}" class="menu-link {{ request()->is('admin/laporan*') ? 'active' : '' }}">
+                <a href="{{ url('/admin/laporan') }}" 
+                   class="menu-link {{ request()->is('admin/laporan*') ? 'active' : '' }}">
                     <i class="bi bi-file-earmark-text"></i>
                     <span>Laporan</span>
                 </a>
             </div>
+
         </div>
     </div>
 
