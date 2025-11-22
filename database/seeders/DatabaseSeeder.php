@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
 
         // Seeder jadwal & warga
         $this->call([
-            \Database\Seeders\JadwalKesehatanSeeder::class,
+            \Database\Seeders\JadwalPosyanduSeeder::class,  // Sudah diganti dari JadwalKesehatanSeeder
             \Database\Seeders\WargaSeeder::class,
         ]);
 

@@ -5,15 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class JadwalKesehatan extends Model
+class JadwalPosyandu extends Model
 {
     use HasFactory;
 
+    protected $table = 'jadwal_posyandu';
+    protected $primaryKey = 'jadwal_id';
+
     protected $fillable = [
+        'nama_posyandu',
         'tanggal',
-        'nama_kegiatan',
+        'tema',
         'keterangan',
-        'lokasi',
+        'poster',
     ];
 
     // 🔗 RELASI: 1 Jadwal -> Banyak Layanan Posyandu
@@ -22,4 +26,3 @@ class JadwalKesehatan extends Model
         return $this->hasMany(LayananPosyandu::class, 'jadwal_id');
     }
 }
-

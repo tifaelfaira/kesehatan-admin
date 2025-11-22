@@ -6,18 +6,11 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\JadwalKesehatanController;
+use App\Http\Controllers\JadwalPosyanduController; // Ganti controller
 use App\Http\Controllers\KesehatanController;
 use App\Http\Controllers\WargaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LayananPosyanduController;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
-
 
 // ===============================
 // AUTH (Login & Register)
@@ -29,14 +22,13 @@ Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
 });
 
-
 // ===============================
 // ADMIN
 // ===============================
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    Route::resource('jadwal', JadwalKesehatanController::class);
+    Route::resource('jadwal', JadwalPosyanduController::class); // Ganti controller
     Route::resource('warga', WargaController::class);
     Route::resource('user', UserController::class);
     Route::resource('kesehatan', KesehatanController::class);
@@ -54,7 +46,6 @@ Route::prefix('admin')->group(function () {
         ]);
 });
 
-
 // ===============================
 // LOGOUT (POST ONLY)
 // ===============================
@@ -64,7 +55,6 @@ Route::post('/logout', function (Request $request) {
     $request->session()->regenerateToken();
     return redirect()->route('auth.index')->with('success', 'Anda berhasil logout.');
 })->name('logout');
-
 
 // ===============================
 // DEFAULT ROUTE

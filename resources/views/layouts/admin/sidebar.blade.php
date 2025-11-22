@@ -39,7 +39,16 @@
                     <a href="{{ url('/admin/jadwal') }}" 
                        class="menu-link {{ request()->is('admin/jadwal*') ? 'active' : '' }}">
                         <i class="bi bi-calendar-check"></i>
-                        <span>Jadwal Kesehatan</span>
+                        <span>Jadwal Posyandu</span> <!-- Diubah dari "Jadwal Kesehatan" -->
+                    </a>
+                </div>
+
+                <!-- Tambahkan menu Layanan Posyandu di Fitur Utama juga -->
+                <div class="menu-item">
+                    <a href="{{ route('admin.layanan-posyandu.index') }}"
+                       class="menu-link {{ request()->is('admin/layanan-posyandu*') ? 'active' : '' }}">
+                        <i class="bi bi-hospital"></i>
+                        <span>Layanan Posyandu</span>
                     </a>
                 </div>
             </div>
@@ -64,7 +73,8 @@
                     </a>
                 </div>
 
-                <!-- MENU LAYANAN POSYANDU FIX -->
+                <!-- Opsional: Bisa dihapus dari sini jika sudah dipindah ke Fitur Utama -->
+                <!--
                 <div class="menu-item">
                     <a href="{{ route('admin.layanan-posyandu.index') }}"
                        class="menu-link {{ request()->is('admin/layanan-posyandu*') ? 'active' : '' }}">
@@ -72,6 +82,7 @@
                         <span>Layanan Posyandu</span>
                     </a>
                 </div>
+                -->
 
             </div>
 

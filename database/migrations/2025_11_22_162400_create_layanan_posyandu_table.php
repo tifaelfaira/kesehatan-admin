@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('layanan_posyandu', function (Blueprint $table) {
-            $table->id('layanan_id'); // primary key sesuai model
+            $table->id('layanan_id');
             $table->unsignedBigInteger('jadwal_id');
             $table->unsignedBigInteger('warga_id');
             $table->float('berat');
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamps();
 
             // foreign key
-            $table->foreign('jadwal_id')->references('id')->on('jadwal_kesehatans')->onDelete('cascade');
+            $table->foreign('jadwal_id')->references('jadwal_id')->on('jadwal_posyandu')->onDelete('cascade');
             $table->foreign('warga_id')->references('id')->on('warga')->onDelete('cascade');
         });
     }
@@ -29,5 +29,3 @@ return new class extends Migration
         Schema::dropIfExists('layanan_posyandu');
     }
 };
-
-

@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -23,21 +22,24 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-       return [
-    'name' => fake()->name(),
-    'email' => fake()->unique()->safeEmail(),
-    'password' => static::$password ??= Hash::make('password'),
-    // hapus 'remember_token'
-];
+        return [
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'password' => static::$password ??= Hash::make('password'),
+            'created_at' => now(),
+            'updated_at' => now(),
+            // 'remember_token' dan 'email_verified_at' sudah dihapus - BENAR
+        ];
     }
 
     /**
      * Indicate that the model's email address should be unverified.
+     * Karena kolom 'email_verified_at' tidak ada, method ini bisa dihapus
      */
-    public function unverified(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            // hapus 'email_verified_at' karena kolom ini ga ada
-        ]);
-    }
+    // public function unverified(): static
+    // {
+    //     return $this->state(fn (array $attributes) => [
+    //         // kosong karena kolom tidak ada
+    //     ]);
+    // }
 }

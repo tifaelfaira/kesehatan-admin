@@ -3,27 +3,33 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class CreateFirstUserSeeder extends Seeder
 {
-    /**
-     * Jalankan seeder database.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        // Hapus dulu user admin jika sudah ada
-        User::where('email', 'admindesa@gmail.com')->delete();
+        // Hapus semua user existing
+        DB::table('users')->delete();
 
-        // Membuat akun admin pertama sesuai permintaan tugas.
+        // Buat user admin
         User::create([
-            'name' => 'Admin Desa',
-            'email' => 'admindesa@gmail.com',
-            'password' => Hash::make('admin123'),
-            'role' => 'admin',
+            'name' => 'Administrator',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('password123'),
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
+
+        // Buat 100 user biasa menggunakan factory
+        User::factory()->count(100)->create();
+
+        $this->command->info('User admin dan 100 data user berhasil dibuat!');
+        $this->command->info('Email admin: admin@example.com');
+        $this->command->info('Password admin: password123');
+        $this->command->info('Password user biasa: password');
+        $this->command->info('Total user: ' . User::count());
     }
 }

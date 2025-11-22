@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LayananPosyandu;
-use App\Models\JadwalKesehatan;
+use App\Models\JadwalPosyandu;
 use App\Models\Warga;
 use Illuminate\Http\Request;
 
@@ -14,7 +14,7 @@ class LayananPosyanduController extends Controller
     {
         $data = LayananPosyandu::with(['jadwal', 'warga'])
             ->orderBy('layanan_id', 'DESC')
-            ->paginate(10);
+            ->get(); // Ganti paginate(10) dengan get()
 
         return view('pages.layanan_posyandu.index', compact('data'));
     }
@@ -22,7 +22,7 @@ class LayananPosyanduController extends Controller
     // Form tambah layanan
     public function create()
     {
-        $jadwal = JadwalKesehatan::orderBy('tanggal', 'asc')->get();
+        $jadwal = JadwalPosyandu::orderBy('tanggal', 'asc')->get();
         $warga  = Warga::orderBy('nama', 'asc')->get();
 
         return view('pages.layanan_posyandu.create', compact('jadwal', 'warga'));
@@ -32,11 +32,11 @@ class LayananPosyanduController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'jadwal_id' => 'required|exists:jadwal_kesehatans,id',
+            'jadwal_id' => 'required|exists:jadwal_posyandu,jadwal_id',
             'warga_id' => 'required|exists:warga,id',
-            'berat' => 'required|numeric|min:1',
+            'berat' => 'required|numeric|min:0.1',
             'tinggi' => 'required|numeric|min:1',
-            'vitamin' => 'nullable|string',
+            'vitamin' => 'nullable|string|max:255',
             'konseling' => 'nullable|string',
         ]);
 
@@ -57,7 +57,7 @@ class LayananPosyanduController extends Controller
     public function edit($layanan_id)
     {
         $layanan = LayananPosyandu::findOrFail($layanan_id);
-        $jadwal = JadwalKesehatan::orderBy('tanggal', 'asc')->get();
+        $jadwal = JadwalPosyandu::orderBy('tanggal', 'asc')->get();
         $warga  = Warga::orderBy('nama', 'asc')->get();
 
         return view('pages.layanan_posyandu.edit', compact('layanan', 'jadwal', 'warga'));
@@ -67,11 +67,11 @@ class LayananPosyanduController extends Controller
     public function update(Request $request, $layanan_id)
     {
         $request->validate([
-            'jadwal_id' => 'required|exists:jadwal_kesehatans,id',
+            'jadwal_id' => 'required|exists:jadwal_posyandu,jadwal_id',
             'warga_id' => 'required|exists:warga,id',
-            'berat' => 'required|numeric|min:1',
+            'berat' => 'required|numeric|min:0.1',
             'tinggi' => 'required|numeric|min:1',
-            'vitamin' => 'nullable|string',
+            'vitamin' => 'nullable|string|max:255',
             'konseling' => 'nullable|string',
         ]);
 

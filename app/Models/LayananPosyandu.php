@@ -28,10 +28,10 @@ class LayananPosyandu extends Model
         'konseling',
     ];
 
-    // Relasi ke JadwalKesehatan
+    // Relasi ke JadwalPosyandu (Ganti model)
     public function jadwal()
     {
-        return $this->belongsTo(JadwalKesehatan::class, 'jadwal_id', 'id');
+        return $this->belongsTo(JadwalPosyandu::class, 'jadwal_id', 'jadwal_id');
     }
 
     // Relasi ke Warga

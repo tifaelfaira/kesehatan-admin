@@ -42,7 +42,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h4 class="fw-bold text-success">{{ $stats['totalJadwal'] }}</h4>
-                            <p class="text-muted mb-0">Jadwal Aktif</p>
+                            <p class="text-muted mb-0">Jadwal Posyandu</p>
                         </div>
                         <div class="bg-success bg-opacity-10 p-3 rounded-circle">
                             <i class="bi bi-calendar-check text-success fs-4"></i>
@@ -61,7 +61,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h4 class="fw-bold text-purple">{{ $stats['kunjunganBulanIni'] }}</h4>
-                            <p class="text-muted mb-0">Kunjungan Bulan Ini</p>
+                            <p class="text-muted mb-0">Kunjungan Posyandu</p>
                         </div>
                         <div class="bg-purple bg-opacity-10 p-3 rounded-circle">
                             <i class="bi bi-hospital text-purple fs-4"></i>
@@ -80,7 +80,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h4 class="fw-bold text-warning">{{ $stats['jadwalHariIni'] }}</h4>
-                            <p class="text-muted mb-0">Jadwal Hari Ini</p>
+                            <p class="text-muted mb-0">Posyandu Hari Ini</p>
                         </div>
                         <div class="bg-warning bg-opacity-10 p-3 rounded-circle">
                             <i class="bi bi-clock text-warning fs-4"></i>
@@ -101,7 +101,7 @@
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                     <span><i class="bi bi-people me-2"></i> Data Warga Terbaru</span>
-                    <a href="#" class="btn btn-sm btn-light">Lihat Semua</a>
+                    <a href="{{ url('/admin/warga') }}" class="btn btn-sm btn-light">Lihat Semua</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -138,6 +138,8 @@
                                             <span class="badge bg-info">Lansia</span>
                                         @elseif($warga['status'] == 'Ibu Hamil')
                                             <span class="badge bg-warning">Ibu Hamil</span>
+                                        @elseif($warga['status'] == 'Balita')
+                                            <span class="badge bg-purple">Balita</span>
                                         @else
                                             <span class="badge bg-secondary">{{ $warga['status'] }}</span>
                                         @endif
@@ -151,12 +153,12 @@
             </div>
         </div>
 
-        <!-- Jadwal Kesehatan Mendatang -->
+        <!-- Jadwal Posyandu Mendatang -->
         <div class="col-lg-6 mb-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-calendar-event me-2"></i> Jadwal Mendatang</span>
-                    <a href="#" class="btn btn-sm btn-light">Lihat Semua</a>
+                    <span><i class="bi bi-calendar-event me-2"></i> Jadwal Posyandu Mendatang</span>
+                    <a href="{{ url('/admin/jadwal') }}" class="btn btn-sm btn-light">Lihat Semua</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -164,8 +166,8 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Tanggal</th>
-                                    <th>Kegiatan</th>
-                                    <th>Lokasi</th>
+                                    <th>Posyandu & Tema</th>
+                                    <th>Keterangan</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -179,12 +181,11 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="fw-semibold">{{ $jadwal['nama_kegiatan'] }}</div>
-                                        <small class="text-muted">{{ $jadwal['peserta'] }}</small>
+                                        <div class="fw-semibold">{{ $jadwal['nama_posyandu'] }}</div>
+                                        <small class="text-muted">{{ $jadwal['tema'] }}</small>
                                     </td>
                                     <td>
-                                        <small>{{ $jadwal['lokasi'] }}</small>
-                                        <div class="text-muted">{{ $jadwal['waktu'] }}</div>
+                                        <small>{{ Str::limit($jadwal['keterangan'], 30) ?: '-' }}</small>
                                     </td>
                                     <td>
                                         @if($jadwal['status'] == 'hari_ini')
@@ -215,25 +216,25 @@
                     <div class="row text-center mb-3">
                         <div class="col-6 mb-3">
                             <div class="border rounded p-3 bg-light">
-                                <h4 class="text-warning mb-1">8</h4>
+                                <h4 class="text-warning mb-1">{{ $stats['pending'] ?? 8 }}</h4>
                                 <small class="text-muted">Pending</small>
                             </div>
                         </div>
                         <div class="col-6 mb-3">
                             <div class="border rounded p-3 bg-light">
-                                <h4 class="text-success mb-1">156</h4>
+                                <h4 class="text-success mb-1">{{ $stats['selesai'] ?? 156 }}</h4>
                                 <small class="text-muted">Selesai</small>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="border rounded p-3 bg-light">
-                                <h4 class="text-primary mb-1">12</h4>
+                                <h4 class="text-primary mb-1">{{ $stats['berjalan'] ?? 12 }}</h4>
                                 <small class="text-muted">Berjalan</small>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="border rounded p-3 bg-light">
-                                <h4 class="text-purple mb-1">{{ $stats['kepuasanWarga'] }}%</h4>
+                                <h4 class="text-purple mb-1">{{ $stats['kepuasanWarga'] ?? 95 }}%</h4>
                                 <small class="text-muted">Kepuasan</small>
                             </div>
                         </div>
@@ -244,14 +245,14 @@
                             <i class="bi bi-lightning me-2"></i> Quick Actions
                         </h6>
                         <div class="d-grid gap-2">
-                            <a href="#" class="btn btn-outline-primary btn-sm">
+                            <a href="{{ route('jadwal.create') }}" class="btn btn-outline-primary btn-sm">
                                 <i class="bi bi-plus-circle me-1"></i> Tambah Jadwal
                             </a>
-                            <a href="#" class="btn btn-outline-success btn-sm">
+                            <a href="{{ url('/admin/warga/create') }}" class="btn btn-outline-success btn-sm">
                                 <i class="bi bi-person-plus me-1"></i> Tambah Warga
                             </a>
-                            <a href="#" class="btn btn-outline-info btn-sm">
-                                <i class="bi bi-file-earmark-text me-1"></i> Buat Laporan
+                            <a href="{{ route('admin.layanan-posyandu.create') }}" class="btn btn-outline-info btn-sm">
+                                <i class="bi bi-hospital me-1"></i> Tambah Layanan
                             </a>
                         </div>
                     </div>
@@ -303,25 +304,25 @@
                     <div class="row text-center">
                         <div class="col-md-3 mb-3">
                             <div class="border rounded p-3">
-                                <h4 class="text-primary mb-1">{{ $stats['rataRataUsia'] }}</h4>
+                                <h4 class="text-primary mb-1">{{ $stats['rataRataUsia'] ?? 35 }}</h4>
                                 <small class="text-muted">Rata-rata Usia</small>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="border rounded p-3">
-                                <h4 class="text-success mb-1">68%</h4>
+                                <h4 class="text-success mb-1">{{ $stats['wargaAktif'] ?? 68 }}%</h4>
                                 <small class="text-muted">Warga Aktif</small>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="border rounded p-3">
-                                <h4 class="text-info mb-1">23%</h4>
+                                <h4 class="text-info mb-1">{{ $stats['persentaseLansia'] ?? 23 }}%</h4>
                                 <small class="text-muted">Lansia</small>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="border rounded p-3">
-                                <h4 class="text-warning mb-1">9%</h4>
+                                <h4 class="text-warning mb-1">{{ $stats['persentaseIbuBalita'] ?? 9 }}%</h4>
                                 <small class="text-muted">Ibu Hamil & Balita</small>
                             </div>
                         </div>
