@@ -7,12 +7,15 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <a href="{{ route('jadwal.create') }}" class="btn btn-primary mb-3">+ Tambah Jadwal</a>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="{{ route('jadwal.create') }}" class="btn btn-primary">+ Tambah Jadwal</a>
+        <span class="badge bg-success">Total: {{ $jadwal->total() }} Data</span>
+    </div>
 
     <table class="table table-bordered">
         <thead class="table-primary">
             <tr>
-                <th>No</th>  <!-- TAMBAH INI -->
+                <th>No</th>
                 <th>Tanggal</th>
                 <th>Nama Posyandu</th>
                 <th>Tema</th>
@@ -21,13 +24,14 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($jadwal as $j)
+            @foreach($jadwal as $index => $j)
                 <tr>
-                    <td>{{ $loop->iteration }}</td>  <!-- TAMBAH INI -->
-                    <td>{{ $j->tanggal }}</td>
+                    {{-- Nomor urut dengan pagination --}}
+                    <td>{{ ($jadwal->currentPage() - 1) * $jadwal->perPage() + $loop->iteration }}</td>
+                    <td>{{ \Carbon\Carbon::parse($j->tanggal)->format('d/m/Y') }}</td>
                     <td>{{ $j->nama_posyandu }}</td>
                     <td>{{ $j->tema }}</td>
-                    <td>{{ $j->keterangan }}</td>
+                    <td>{{ $j->keterangan ?: '-' }}</td>
                     <td>
                         <a href="{{ route('jadwal.edit', $j->jadwal_id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('jadwal.destroy', $j->jadwal_id) }}" method="POST" class="d-inline">
@@ -39,5 +43,10 @@
             @endforeach
         </tbody>
     </table>
+
+    {{-- TAMBAH PAGINATION DI SINI --}}
+    <div class="mt-3">
+        {{ $jadwal->links('pagination::bootstrap-5') }}
+    </div>
 </div>
 @endsection

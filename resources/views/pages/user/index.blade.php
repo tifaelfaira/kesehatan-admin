@@ -9,9 +9,13 @@
       <i class="bi bi-person-lines-fill"></i> Data User
       <span class="badge bg-info text-dark ms-2">Admin Panel</span>
     </h4>
-    <a href="{{ route('user.create') }}" class="btn btn-primary">
-      <i class="bi bi-person-plus-fill"></i> Tambah User
-    </a>
+    <div>
+      {{-- UBAH INI: Total data dengan pagination --}}
+      <span class="badge bg-success me-2">Total: {{ $users->total() }} User</span>
+      <a href="{{ route('user.create') }}" class="btn btn-primary">
+        <i class="bi bi-person-plus-fill"></i> Tambah User
+      </a>
+    </div>
   </div>
 
   @if(session('success'))
@@ -33,13 +37,15 @@
             <th>Nama</th>
             <th>Email</th>
             <th>Role</th>
+            <th>Tanggal Dibuat</th>
             <th>Aksi</th>
           </tr>
         </thead>
         <tbody class="text-center align-middle">
           @forelse($users as $index => $user)
             <tr>
-              <td>{{ $index + 1 }}</td>
+              {{-- UBAH INI: Nomor urut dengan pagination --}}
+              <td>{{ $users->firstItem() + $index }}</td>
               <td>
                 <i class="bi bi-person-circle text-primary"></i>
                 {{ $user->name }}
@@ -53,26 +59,46 @@
                 @endif
               </td>
               <td>
-                <a href="{{ route('user.edit', $user->id) }}" class="btn btn-sm btn-warning">
-                  <i class="bi bi-pencil-square"></i>
-                </a>
-                <form action="{{ route('user.destroy', $user->id) }}" method="POST" class="d-inline">
-                  @csrf
-                  @method('DELETE')
-                  <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus user ini?')">
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </form>
+                <small class="text-muted">
+                  {{ $user->created_at->format('d/m/Y') }}
+                </small>
+              </td>
+              <td>
+                <div class="btn-group" role="group">
+                  <a href="{{ route('user.edit', $user->id) }}" class="btn btn-sm btn-warning" title="Edit">
+                    <i class="bi bi-pencil-square"></i>
+                  </a>
+                  <form action="{{ route('user.destroy', $user->id) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus user ini?')" title="Hapus">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </form>
+                </div>
               </td>
             </tr>
           @empty
             <tr>
-              <td colspan="5" class="text-muted">Belum ada pengguna terdaftar</td>
+              <td colspan="6" class="text-muted py-4">
+                <div class="text-center">
+                  <i class="bi bi-people" style="font-size: 3rem;"></i>
+                  <p class="mt-2">Belum ada pengguna terdaftar</p>
+                  <a href="{{ route('user.create') }}" class="btn btn-primary btn-sm">
+                    Tambah User Pertama
+                  </a>
+                </div>
+              </td>
             </tr>
           @endforelse
         </tbody>
       </table>
     </div>
+  </div>
+
+  {{-- TAMBAH INI: Pagination --}}
+  <div class="mt-3 d-flex justify-content-center">
+    {{ $users->links('pagination::bootstrap-5') }}
   </div>
 </div>
 @endsection

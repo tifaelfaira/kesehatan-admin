@@ -9,7 +9,8 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="fw-bold">Data Layanan Posyandu</h3>
         <div>
-            <span class="badge bg-success me-2">Total: {{ $data->count() }} Data</span>
+            {{-- UBAH INI: $data->count() menjadi $data->total() --}}
+            <span class="badge bg-success me-2">Total: {{ $data->total() }} Data</span>
             <a href="{{ route('admin.layanan-posyandu.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus-circle"></i> Tambah Layanan
             </a>
@@ -44,8 +45,8 @@
                     <tbody>
                         @forelse($data as $i => $row)
                             <tr>
-                                {{-- Nomor urut --}}
-                                <td class="text-center">{{ $i + 1 }}</td> {{-- Ganti dari $data->firstItem() + $i --}}
+                                {{-- UBAH INI: Nomor urut dengan pagination --}}
+                                <td class="text-center">{{ $data->firstItem() + $i }}</td>
 
                                 {{-- Nama warga --}}
                                 <td>
@@ -124,10 +125,10 @@
         </div>
     </div>
 
-    {{-- HAPUS BAGIAN PAGINATION --}}
-    {{-- <div class="mt-3 d-flex justify-content-center">
-        {{ $data->links() }}
-    </div> --}}
+    {{-- TAMBAH INI: Pagination --}}
+    <div class="mt-3 d-flex justify-content-center">
+        {{ $data->links('pagination::bootstrap-5') }}
+    </div>
 
 </div>
 @endsection

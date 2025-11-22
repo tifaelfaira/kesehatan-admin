@@ -9,7 +9,8 @@ class JadwalPosyanduController extends Controller
 {
     public function index()
     {
-        $jadwal = JadwalPosyandu::latest()->get();
+        // UBAH INI: dari get() menjadi paginate(10)
+        $jadwal = JadwalPosyandu::latest()->paginate(10);
         return view('pages.jadwal_posyandu.index', compact('jadwal'));
     }
 

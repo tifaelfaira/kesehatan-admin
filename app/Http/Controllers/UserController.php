@@ -11,7 +11,8 @@ class UserController extends Controller
     // Tampilkan semua user
     public function index()
     {
-        $users = User::all(); // Ubah dari $user menjadi $users
+        // UBAH INI: dari all() menjadi paginate(10)
+        $users = User::orderBy('created_at', 'DESC')->paginate(10);
         return view('pages.user.index', compact('users'));
     }
 
@@ -26,14 +27,16 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|min:3',
-            'email' => 'required|email|unique:users,email', // Perbaiki: users (bukan user)
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
+            'role' => 'required|in:admin,guest', // Tambah validasi role
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role,
         ]);
 
         return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan!');
@@ -50,13 +53,15 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|min:3',
-            'email' => 'required|email|unique:users,email,' . $user->id, // Perbaiki: users (bukan user)
+            'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:6',
+            'role' => 'required|in:admin,guest', // Tambah validasi role
         ]);
 
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
+            'role' => $request->role,
             'password' => $request->filled('password')
                 ? Hash::make($request->password)
                 : $user->password,

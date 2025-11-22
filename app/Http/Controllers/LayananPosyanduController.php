@@ -12,9 +12,10 @@ class LayananPosyanduController extends Controller
     // Menampilkan daftar layanan posyandu
     public function index()
     {
+        // UBAH INI: dari get() menjadi paginate(10)
         $data = LayananPosyandu::with(['jadwal', 'warga'])
             ->orderBy('layanan_id', 'DESC')
-            ->get(); // Ganti paginate(10) dengan get()
+            ->paginate(10); // Ganti get() dengan paginate(10)
 
         return view('pages.layanan_posyandu.index', compact('data'));
     }

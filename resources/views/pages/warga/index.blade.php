@@ -2,51 +2,112 @@
 
 @section('content')
 <div class="container">
-    <h2 class="mb-4">Data Warga</h2>
+    {{-- Header dengan total data --}}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Data Warga</h2>
+        <div>
+            {{-- UBAH INI: Total data dengan pagination --}}
+            <span class="badge bg-success me-2">Total: {{ $warga->total() }} Warga</span>
+            <a href="{{ route('warga.create') }}" class="btn btn-primary">
+                <i class="bi bi-person-plus"></i> Tambah Warga
+            </a>
+        </div>
+    </div>
 
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
     @endif
 
-    <a href="{{ route('warga.create') }}" class="btn btn-primary mb-3">+ Tambah Warga</a>
+    {{-- Tabel data --}}
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead class="table-primary">
+                        <tr>
+                            <th width="5%">No</th>
+                            <th>Nama</th>
+                            <th>NIK</th>
+                            <th>Jenis Kelamin</th>
+                            <th>Umur</th>
+                            <th>Pekerjaan</th>
+                            <th>Alamat</th>
+                            <th width="15%">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($warga as $index => $item)
+                        <tr>
+                            {{-- UBAH INI: Nomor urut dengan pagination --}}
+                            <td class="text-center">{{ $warga->firstItem() + $index }}</td>
+                            <td>
+                                <strong>{{ $item->nama }}</strong>
+                                @if($item->rt_rw)
+                                    <br><small class="text-muted">RT/RW: {{ $item->rt_rw }}</small>
+                                @endif
+                            </td>
+                            <td>{{ $item->nik }}</td>
+                            {{-- JENIS KELAMIN TETAP TEKS --}}
+                            <td class="text-center">{{ $item->jenis_kelamin }}</td>
+                            <td class="text-center">{{ $item->umur }} thn</td>
+                            <td>{{ $item->pekerjaan ?: '-' }}</td>
+                            <td>
+                                <small>{{ Str::limit($item->alamat, 50) }}</small>
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    {{-- Edit --}}
+                                    <a href="{{ route('warga.edit', $item->id) }}" 
+                                       class="btn btn-warning btn-sm" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
 
-    <table class="table table-bordered">
-        <thead class="table-light">
-            <tr>
-                <th>No</th>
-                <th>Nama</th>
-                <th>NIK</th>
-                <th>JK</th>
-                <th>Umur</th>
-                <th>Pekerjaan</th>
-                <th>Alamat</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($warga as $item)
-            <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $item->nama }}</td>
-                <td>{{ $item->nik }}</td>
-                <td>{{ $item->jenis_kelamin }}</td>
-                <td>{{ $item->umur }}</td>
-                <td>{{ $item->pekerjaan }}</td>
-                <td>{{ $item->alamat }}</td>
-                <td>
-                    <a href="{{ route('warga.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    {{-- Detail --}}
+                                    @if(method_exists($item, 'show'))
+                                    <a href="{{ route('warga.show', $item->id) }}" 
+                                       class="btn btn-info btn-sm" title="Detail">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    @endif
 
-                    <form action="{{ route('warga.destroy', $item->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus data warga ini?')">Hapus</button>
-                    </form>
-                </td>
-            </tr>
-            @empty
-            <tr><td colspan="8" class="text-center">Belum ada data warga.</td></tr>
-            @endforelse
-        </tbody>
-    </table>
+                                    {{-- Hapus --}}
+                                    <form action="{{ route('warga.destroy', $item->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" 
+                                                onclick="return confirm('Yakin hapus data warga ini?')"
+                                                title="Hapus">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <div class="text-muted">
+                                    <i class="bi bi-people" style="font-size: 3rem;"></i>
+                                    <p class="mt-2">Belum ada data warga</p>
+                                    <a href="{{ route('warga.create') }}" class="btn btn-primary btn-sm">
+                                        Tambah Data Pertama
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {{-- TAMBAH INI: Pagination --}}
+    <div class="mt-3 d-flex justify-content-center">
+        {{ $warga->links('pagination::bootstrap-5') }}
+    </div>
 </div>
 @endsection

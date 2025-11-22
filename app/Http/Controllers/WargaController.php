@@ -10,7 +10,8 @@ class WargaController extends Controller
     // Tampilkan semua warga
     public function index()
     {
-        $warga = Warga::all();
+        // UBAH INI: dari all() menjadi paginate(10)
+        $warga = Warga::orderBy('created_at', 'DESC')->paginate(10);
         return view('pages.warga.index', compact('warga'));
     }
 
@@ -25,7 +26,7 @@ class WargaController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255',
-            'nik' => 'required|string|max:16|unique:warga', // PERBAIKI: warga (bukan wargas)
+            'nik' => 'required|string|max:16|unique:warga',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'umur' => 'required|integer',
             'pekerjaan' => 'nullable|string|max:255',
@@ -49,7 +50,7 @@ class WargaController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255',
-            'nik' => 'required|string|max:16|unique:warga,nik,' . $warga->id, // PERBAIKI: warga (bukan wargas)
+            'nik' => 'required|string|max:16|unique:warga,nik,' . $warga->id,
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'umur' => 'required|integer',
             'pekerjaan' => 'nullable|string|max:255',
