@@ -9,7 +9,6 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="fw-bold">Data Layanan Posyandu</h3>
         <div>
-            {{-- UBAH INI: $data->count() menjadi $data->total() --}}
             <span class="badge bg-success me-2">Total: {{ $data->total() }} Data</span>
             <a href="{{ route('admin.layanan-posyandu.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus-circle"></i> Tambah Layanan
@@ -24,6 +23,62 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
+
+    {{-- TAMBAH INI: Form Filter --}}
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <i class="bi bi-funnel"></i> Filter Data
+        </div>
+        <div class="card-body">
+            <form method="GET" action="{{ route('admin.layanan-posyandu.index') }}" class="row g-3">
+                {{-- Filter Jadwal Posyandu --}}
+                <div class="col-md-3">
+                    <label for="jadwal_id" class="form-label">Jadwal Posyandu</label>
+                    <select name="jadwal_id" id="jadwal_id" class="form-select" onchange="this.form.submit()">
+                        <option value="">Semua Jadwal</option>
+                        @foreach($jadwalList as $jadwal)
+                            <option value="{{ $jadwal->jadwal_id }}" {{ request('jadwal_id') == $jadwal->jadwal_id ? 'selected' : '' }}>
+                                {{ $jadwal->nama_posyandu }} - {{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d/m/Y') }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Filter Warga --}}
+                <div class="col-md-3">
+                    <label for="warga_id" class="form-label">Nama Warga</label>
+                    <select name="warga_id" id="warga_id" class="form-select" onchange="this.form.submit()">
+                        <option value="">Semua Warga</option>
+                        @foreach($wargaList as $warga)
+                            <option value="{{ $warga->id }}" {{ request('warga_id') == $warga->id ? 'selected' : '' }}>
+                                {{ $warga->nama }} ({{ $warga->umur }} thn)
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Filter Vitamin --}}
+                <div class="col-md-3">
+                    <label for="vitamin" class="form-label">Jenis Vitamin</label>
+                    <select name="vitamin" id="vitamin" class="form-select" onchange="this.form.submit()">
+                        <option value="">Semua Vitamin</option>
+                        @foreach($vitaminList as $vitamin)
+                            <option value="{{ $vitamin }}" {{ request('vitamin') == $vitamin ? 'selected' : '' }}>
+                                {{ $vitamin }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Tombol Reset --}}
+                <div class="col-md-3 d-flex align-items-end">
+                    <a href="{{ route('admin.layanan-posyandu.index') }}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-clockwise"></i> Reset Filter
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 
     {{-- Tabel data --}}
     <div class="card shadow-sm">
@@ -45,7 +100,6 @@
                     <tbody>
                         @forelse($data as $i => $row)
                             <tr>
-                                {{-- UBAH INI: Nomor urut dengan pagination --}}
                                 <td class="text-center">{{ $data->firstItem() + $i }}</td>
 
                                 {{-- Nama warga --}}
@@ -125,7 +179,7 @@
         </div>
     </div>
 
-    {{-- TAMBAH INI: Pagination --}}
+    {{-- Pagination --}}
     <div class="mt-3 d-flex justify-content-center">
         {{ $data->links('pagination::bootstrap-5') }}
     </div>

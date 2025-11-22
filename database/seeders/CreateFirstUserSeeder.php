@@ -14,11 +14,12 @@ class CreateFirstUserSeeder extends Seeder
         // Hapus semua user existing
         DB::table('users')->delete();
 
-        // Buat user admin
+        // Buat user admin - TAMBAH ROLE
         User::create([
             'name' => 'Administrator',
             'email' => 'admin@example.com',
             'password' => Hash::make('password123'),
+            'role' => 'admin', // TAMBAH INI
             'created_at' => now(),
             'updated_at' => now(),
         ]);

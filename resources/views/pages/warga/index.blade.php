@@ -6,7 +6,6 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">Data Warga</h2>
         <div>
-            {{-- UBAH INI: Total data dengan pagination --}}
             <span class="badge bg-success me-2">Total: {{ $warga->total() }} Warga</span>
             <a href="{{ route('warga.create') }}" class="btn btn-primary">
                 <i class="bi bi-person-plus"></i> Tambah Warga
@@ -20,6 +19,46 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
+
+    {{-- TAMBAH INI: Form Filter --}}
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <i class="bi bi-funnel"></i> Filter Data
+        </div>
+        <div class="card-body">
+            <form method="GET" action="{{ route('warga.index') }}" class="row g-3">
+                {{-- Filter Jenis Kelamin --}}
+                <div class="col-md-3">
+                    <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
+                    <select name="jenis_kelamin" id="jenis_kelamin" class="form-select" onchange="this.form.submit()">
+                        <option value="">Semua Jenis Kelamin</option>
+                        <option value="Laki-laki" {{ request('jenis_kelamin') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                        <option value="Perempuan" {{ request('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                    </select>
+                </div>
+
+                {{-- Filter Pekerjaan --}}
+                <div class="col-md-3">
+                    <label for="pekerjaan" class="form-label">Pekerjaan</label>
+                    <select name="pekerjaan" id="pekerjaan" class="form-select" onchange="this.form.submit()">
+                        <option value="">Semua Pekerjaan</option>
+                        @foreach($pekerjaanList as $pekerjaan)
+                            <option value="{{ $pekerjaan }}" {{ request('pekerjaan') == $pekerjaan ? 'selected' : '' }}>
+                                {{ $pekerjaan }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Tombol Reset --}}
+                <div class="col-md-3 d-flex align-items-end">
+                    <a href="{{ route('warga.index') }}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-clockwise"></i> Reset Filter
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 
     {{-- Tabel data --}}
     <div class="card shadow-sm">
@@ -41,7 +80,6 @@
                     <tbody>
                         @forelse($warga as $index => $item)
                         <tr>
-                            {{-- UBAH INI: Nomor urut dengan pagination --}}
                             <td class="text-center">{{ $warga->firstItem() + $index }}</td>
                             <td>
                                 <strong>{{ $item->nama }}</strong>
@@ -50,7 +88,6 @@
                                 @endif
                             </td>
                             <td>{{ $item->nik }}</td>
-                            {{-- JENIS KELAMIN TETAP TEKS --}}
                             <td class="text-center">{{ $item->jenis_kelamin }}</td>
                             <td class="text-center">{{ $item->umur }} thn</td>
                             <td>{{ $item->pekerjaan ?: '-' }}</td>
@@ -105,7 +142,7 @@
         </div>
     </div>
 
-    {{-- TAMBAH INI: Pagination --}}
+    {{-- Pagination --}}
     <div class="mt-3 d-flex justify-content-center">
         {{ $warga->links('pagination::bootstrap-5') }}
     </div>

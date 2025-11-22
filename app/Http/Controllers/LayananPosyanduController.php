@@ -10,17 +10,29 @@ use Illuminate\Http\Request;
 class LayananPosyanduController extends Controller
 {
     // Menampilkan daftar layanan posyandu
-    public function index()
+    public function index(Request $request) // TAMBAH Request $request
     {
-        // UBAH INI: dari get() menjadi paginate(10)
+        // TAMBAH INI: Kolom yang bisa di-filter
+        $filterableColumns = ['jadwal_id', 'warga_id', 'vitamin'];
+        
+        // UBAH INI: Tambahkan filter dan withQueryString()
         $data = LayananPosyandu::with(['jadwal', 'warga'])
             ->orderBy('layanan_id', 'DESC')
-            ->paginate(10); // Ganti get() dengan paginate(10)
+            ->filter($request, $filterableColumns)
+            ->paginate(10)
+            ->withQueryString();
 
-        return view('pages.layanan_posyandu.index', compact('data'));
+        // TAMBAH INI: Data untuk dropdown filter
+        $jadwalList = JadwalPosyandu::orderBy('tanggal', 'asc')->get();
+        $wargaList = Warga::orderBy('nama', 'asc')->get();
+        $vitaminList = LayananPosyandu::whereNotNull('vitamin')
+            ->distinct()
+            ->pluck('vitamin');
+
+        return view('pages.layanan_posyandu.index', compact('data', 'jadwalList', 'wargaList', 'vitaminList'));
     }
 
-    // Form tambah layanan
+    // Method lainnya tetap sama...
     public function create()
     {
         $jadwal = JadwalPosyandu::orderBy('tanggal', 'asc')->get();
@@ -29,7 +41,6 @@ class LayananPosyanduController extends Controller
         return view('pages.layanan_posyandu.create', compact('jadwal', 'warga'));
     }
 
-    // Simpan layanan baru
     public function store(Request $request)
     {
         $request->validate([
@@ -54,7 +65,6 @@ class LayananPosyanduController extends Controller
             ->with('success', 'Data layanan berhasil ditambahkan!');
     }
 
-    // Form edit layanan
     public function edit($layanan_id)
     {
         $layanan = LayananPosyandu::findOrFail($layanan_id);
@@ -64,7 +74,6 @@ class LayananPosyanduController extends Controller
         return view('pages.layanan_posyandu.edit', compact('layanan', 'jadwal', 'warga'));
     }
 
-    // Update layanan
     public function update(Request $request, $layanan_id)
     {
         $request->validate([
@@ -90,7 +99,6 @@ class LayananPosyanduController extends Controller
             ->with('success', 'Data layanan berhasil diperbarui!');
     }
 
-    // Hapus layanan
     public function destroy($layanan_id)
     {
         $layanan = LayananPosyandu::findOrFail($layanan_id);

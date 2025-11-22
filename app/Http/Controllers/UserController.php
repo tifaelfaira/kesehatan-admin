@@ -9,10 +9,17 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     // Tampilkan semua user
-    public function index()
+    public function index(Request $request) // TAMBAH Request $request
     {
-        // UBAH INI: dari all() menjadi paginate(10)
-        $users = User::orderBy('created_at', 'DESC')->paginate(10);
+        // TAMBAH INI: Kolom yang bisa di-filter
+        $filterableColumns = ['role'];
+        
+        // UBAH INI: Tambahkan filter dan withQueryString()
+        $users = User::orderBy('created_at', 'DESC')
+            ->filter($request, $filterableColumns)
+            ->paginate(10)
+            ->withQueryString();
+
         return view('pages.user.index', compact('users'));
     }
 
@@ -29,7 +36,7 @@ class UserController extends Controller
             'name' => 'required|min:3',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
-            'role' => 'required|in:admin,guest', // Tambah validasi role
+            'role' => 'required|in:admin,guest',
         ]);
 
         User::create([
@@ -55,7 +62,7 @@ class UserController extends Controller
             'name' => 'required|min:3',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:6',
-            'role' => 'required|in:admin,guest', // Tambah validasi role
+            'role' => 'required|in:admin,guest',
         ]);
 
         $user->update([

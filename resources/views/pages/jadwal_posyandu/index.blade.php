@@ -12,6 +12,50 @@
         <span class="badge bg-success">Total: {{ $jadwal->total() }} Data</span>
     </div>
 
+    {{-- TAMBAH INI: Form Filter --}}
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <i class="bi bi-funnel"></i> Filter Data
+        </div>
+        <div class="card-body">
+            <form method="GET" action="{{ route('jadwal.index') }}" class="row g-3">
+                {{-- Filter Nama Posyandu --}}
+                <div class="col-md-4">
+                    <label for="nama_posyandu" class="form-label">Nama Posyandu</label>
+                    <select name="nama_posyandu" id="nama_posyandu" class="form-select" onchange="this.form.submit()">
+                        <option value="">Semua Posyandu</option>
+                        @foreach($namaPosyanduList as $nama)
+                            <option value="{{ $nama }}" {{ request('nama_posyandu') == $nama ? 'selected' : '' }}>
+                                {{ $nama }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Filter Tema --}}
+                <div class="col-md-4">
+                    <label for="tema" class="form-label">Tema</label>
+                    <select name="tema" id="tema" class="form-select" onchange="this.form.submit()">
+                        <option value="">Semua Tema</option>
+                        @foreach($temaList as $tema)
+                            <option value="{{ $tema }}" {{ request('tema') == $tema ? 'selected' : '' }}>
+                                {{ $tema }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Tombol Reset --}}
+                <div class="col-md-4 d-flex align-items-end">
+                    <a href="{{ route('jadwal.index') }}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-clockwise"></i> Reset Filter
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- Tabel Data --}}
     <table class="table table-bordered">
         <thead class="table-primary">
             <tr>
@@ -26,7 +70,6 @@
         <tbody>
             @foreach($jadwal as $index => $j)
                 <tr>
-                    {{-- Nomor urut dengan pagination --}}
                     <td>{{ ($jadwal->currentPage() - 1) * $jadwal->perPage() + $loop->iteration }}</td>
                     <td>{{ \Carbon\Carbon::parse($j->tanggal)->format('d/m/Y') }}</td>
                     <td>{{ $j->nama_posyandu }}</td>
@@ -44,7 +87,7 @@
         </tbody>
     </table>
 
-    {{-- TAMBAH PAGINATION DI SINI --}}
+    {{-- Pagination --}}
     <div class="mt-3">
         {{ $jadwal->links('pagination::bootstrap-5') }}
     </div>

@@ -3,25 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Models\Warga;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request; // PASTIKAN INI ADA
 
 class WargaController extends Controller
 {
     // Tampilkan semua warga
-    public function index()
+    public function index(Request $request) // TAMBAH Request $request
     {
-        // UBAH INI: dari all() menjadi paginate(10)
-        $warga = Warga::orderBy('created_at', 'DESC')->paginate(10);
-        return view('pages.warga.index', compact('warga'));
+        // TAMBAH INI: Kolom yang bisa di-filter
+        $filterableColumns = ['jenis_kelamin', 'pekerjaan'];
+        
+        // UBAH INI: Tambahkan filter dan withQueryString()
+        $warga = Warga::orderBy('created_at', 'DESC')
+            ->filter($request, $filterableColumns)
+            ->paginate(10)
+            ->withQueryString();
+
+        // TAMBAH INI: Data untuk dropdown filter
+        $pekerjaanList = Warga::whereNotNull('pekerjaan')
+            ->distinct()
+            ->pluck('pekerjaan');
+
+        return view('pages.warga.index', compact('warga', 'pekerjaanList'));
     }
 
-    // Form tambah warga
+    // Method lainnya tetap sama...
     public function create()
     {
         return view('pages.warga.create');
     }
 
-    // Simpan warga baru
     public function store(Request $request)
     {
         $request->validate([
@@ -39,13 +50,11 @@ class WargaController extends Controller
         return redirect()->route('warga.index')->with('success', 'Data warga berhasil ditambahkan.');
     }
 
-    // Form edit warga
     public function edit(Warga $warga)
     {
         return view('pages.warga.edit', compact('warga'));
     }
 
-    // Update warga
     public function update(Request $request, Warga $warga)
     {
         $request->validate([
@@ -63,14 +72,12 @@ class WargaController extends Controller
         return redirect()->route('warga.index')->with('success', 'Data warga berhasil diperbarui.');
     }
 
-    // Hapus warga
     public function destroy(Warga $warga)
     {
         $warga->delete();
         return redirect()->route('warga.index')->with('success', 'Data warga berhasil dihapus.');
     }
 
-    // Tampilkan detail warga (jika diperlukan)
     public function show(Warga $warga)
     {
         return view('pages.warga.show', compact('warga'));

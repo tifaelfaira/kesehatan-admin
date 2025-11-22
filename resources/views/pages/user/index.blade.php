@@ -10,7 +10,6 @@
       <span class="badge bg-info text-dark ms-2">Admin Panel</span>
     </h4>
     <div>
-      {{-- UBAH INI: Total data dengan pagination --}}
       <span class="badge bg-success me-2">Total: {{ $users->total() }} User</span>
       <a href="{{ route('user.create') }}" class="btn btn-primary">
         <i class="bi bi-person-plus-fill"></i> Tambah User
@@ -24,6 +23,33 @@
       <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
   @endif
+
+  {{-- TAMBAH INI: Form Filter --}}
+  <div class="card mb-4">
+    <div class="card-header bg-light">
+      <i class="bi bi-funnel"></i> Filter Data
+    </div>
+    <div class="card-body">
+      <form method="GET" action="{{ route('user.index') }}" class="row g-3">
+        {{-- Filter Role --}}
+        <div class="col-md-3">
+          <label for="role" class="form-label">Role</label>
+          <select name="role" id="role" class="form-select" onchange="this.form.submit()">
+            <option value="">Semua Role</option>
+            <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+            <option value="guest" {{ request('role') == 'guest' ? 'selected' : '' }}>Guest</option>
+          </select>
+        </div>
+
+        {{-- Tombol Reset --}}
+        <div class="col-md-3 d-flex align-items-end">
+          <a href="{{ route('user.index') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-clockwise"></i> Reset Filter
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <div class="card border-0 shadow-sm">
     <div class="card-header bg-primary text-white fw-semibold">
@@ -44,7 +70,6 @@
         <tbody class="text-center align-middle">
           @forelse($users as $index => $user)
             <tr>
-              {{-- UBAH INI: Nomor urut dengan pagination --}}
               <td>{{ $users->firstItem() + $index }}</td>
               <td>
                 <i class="bi bi-person-circle text-primary"></i>
@@ -96,7 +121,7 @@
     </div>
   </div>
 
-  {{-- TAMBAH INI: Pagination --}}
+  {{-- Pagination --}}
   <div class="mt-3 d-flex justify-content-center">
     {{ $users->links('pagination::bootstrap-5') }}
   </div>

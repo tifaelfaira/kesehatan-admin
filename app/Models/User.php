@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder; // TAMBAH INI
 
 class User extends Authenticatable
 {
@@ -21,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role', // PASTIKAN ROLE ADA DI FILLABLE
     ];
 
     /**
@@ -44,5 +46,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // TAMBAH INI: Scope untuk filter
+    public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder
+    {
+        foreach ($filterableColumns as $column) {
+            if ($request->filled($column)) {
+                $query->where($column, $request->input($column));
+            }
+        }
+        return $query;
     }
 }
