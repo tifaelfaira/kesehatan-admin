@@ -3,22 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\JadwalPosyandu;
-use Illuminate\Http\Request; // PASTIKAN INI ADA
+use Illuminate\Http\Request;
 
 class JadwalPosyanduController extends Controller
 {
-    public function index(Request $request) // TAMBAH Request $request
+    public function index(Request $request)
     {
-        // TAMBAH INI: Kolom yang bisa di-filter
+        // Kolom yang bisa di-filter
         $filterableColumns = ['nama_posyandu', 'tema'];
-        
-        // UBAH INI: Tambahkan filter dan withQueryString()
+        // TAMBAH INI: Kolom yang bisa dicari
+        $searchableColumns = ['nama_posyandu', 'tema', 'keterangan'];
+
+        // UBAH INI: Tambahkan search()
         $jadwal = JadwalPosyandu::latest()
             ->filter($request, $filterableColumns)
+            ->search($request, $searchableColumns) // TAMBAH INI
             ->paginate(10)
             ->withQueryString();
 
-        // TAMBAH INI: Ambil data unik untuk dropdown filter
+        // Data untuk dropdown filter
         $namaPosyanduList = JadwalPosyandu::distinct()->pluck('nama_posyandu');
         $temaList = JadwalPosyandu::distinct()->pluck('tema');
 

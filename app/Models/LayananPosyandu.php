@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder; // TAMBAH INI
+use Illuminate\Database\Eloquent\Builder;
 
 class LayananPosyandu extends Model
 {
@@ -29,7 +29,7 @@ class LayananPosyandu extends Model
         'konseling',
     ];
 
-    // Relasi ke JadwalPosyandu (Ganti model)
+    // Relasi ke JadwalPosyandu
     public function jadwal()
     {
         return $this->belongsTo(JadwalPosyandu::class, 'jadwal_id', 'jadwal_id');
@@ -41,13 +41,26 @@ class LayananPosyandu extends Model
         return $this->belongsTo(Warga::class, 'warga_id', 'id');
     }
 
-    // TAMBAH INI: Scope untuk filter
+    // Scope untuk filter
     public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder
     {
         foreach ($filterableColumns as $column) {
             if ($request->filled($column)) {
                 $query->where($column, $request->input($column));
             }
+        }
+        return $query;
+    }
+
+    // TAMBAH INI: Scope untuk search
+    public function scopeSearch($query, $request, array $columns)
+    {
+        if ($request->filled('search')) {
+            $query->where(function($q) use ($request, $columns) {
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', '%' . $request->search . '%');
+                }
+            });
         }
         return $query;
     }

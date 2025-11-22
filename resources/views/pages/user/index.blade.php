@@ -24,10 +24,10 @@
     </div>
   @endif
 
-  {{-- TAMBAH INI: Form Filter --}}
+  {{-- Form Filter & Search --}}
   <div class="card mb-4">
     <div class="card-header bg-light">
-      <i class="bi bi-funnel"></i> Filter Data
+      <i class="bi bi-funnel"></i> Filter & Pencarian Data
     </div>
     <div class="card-body">
       <form method="GET" action="{{ route('user.index') }}" class="row g-3">
@@ -41,15 +41,46 @@
           </select>
         </div>
 
+        {{-- TAMBAH INI: Search --}}
+        <div class="col-md-6">
+          <label for="search" class="form-label">Pencarian</label>
+          <div class="input-group">
+            <input type="text" name="search" class="form-control" 
+                   value="{{ request('search') }}" 
+                   placeholder="Cari nama atau email..." 
+                   aria-label="Search">
+            <button type="submit" class="input-group-text" id="basic-addon2">
+              <i class="bi bi-search"></i>
+            </button>
+            {{-- Clear Search --}}
+            @if(request('search'))
+              <a href="{{ request()->fullUrlWithQuery(['search' => null]) }}" 
+                 class="btn btn-outline-secondary ms-2" 
+                 id="clear-search">
+                Clear
+              </a>
+            @endif
+          </div>
+        </div>
+
         {{-- Tombol Reset --}}
         <div class="col-md-3 d-flex align-items-end">
-          <a href="{{ route('user.index') }}" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-clockwise"></i> Reset Filter
+          <a href="{{ route('user.index') }}" class="btn btn-outline-secondary w-100">
+            <i class="bi bi-arrow-clockwise"></i> Reset
           </a>
         </div>
       </form>
     </div>
   </div>
+
+  {{-- Info Hasil Pencarian --}}
+  @if(request('search'))
+    <div class="alert alert-info mb-3">
+      <i class="bi bi-info-circle"></i> 
+      Hasil pencarian untuk: <strong>"{{ request('search') }}"</strong>
+      <span class="badge bg-primary ms-2">{{ $users->total() }} user ditemukan</span>
+    </div>
+  @endif
 
   <div class="card border-0 shadow-sm">
     <div class="card-header bg-primary text-white fw-semibold">

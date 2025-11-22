@@ -10,19 +10,22 @@ use Illuminate\Http\Request;
 class LayananPosyanduController extends Controller
 {
     // Menampilkan daftar layanan posyandu
-    public function index(Request $request) // TAMBAH Request $request
+    public function index(Request $request)
     {
-        // TAMBAH INI: Kolom yang bisa di-filter
+        // Kolom yang bisa di-filter
         $filterableColumns = ['jadwal_id', 'warga_id', 'vitamin'];
-        
-        // UBAH INI: Tambahkan filter dan withQueryString()
+        // TAMBAH INI: Kolom yang bisa dicari
+        $searchableColumns = ['vitamin', 'konseling'];
+
+        // UBAH INI: Tambahkan search()
         $data = LayananPosyandu::with(['jadwal', 'warga'])
             ->orderBy('layanan_id', 'DESC')
             ->filter($request, $filterableColumns)
+            ->search($request, $searchableColumns) // TAMBAH INI
             ->paginate(10)
             ->withQueryString();
 
-        // TAMBAH INI: Data untuk dropdown filter
+        // Data untuk dropdown filter
         $jadwalList = JadwalPosyandu::orderBy('tanggal', 'asc')->get();
         $wargaList = Warga::orderBy('nama', 'asc')->get();
         $vitaminList = LayananPosyandu::whereNotNull('vitamin')

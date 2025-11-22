@@ -12,15 +12,15 @@
         <span class="badge bg-success">Total: {{ $jadwal->total() }} Data</span>
     </div>
 
-    {{-- TAMBAH INI: Form Filter --}}
+    {{-- Form Filter & Search --}}
     <div class="card mb-4">
         <div class="card-header bg-light">
-            <i class="bi bi-funnel"></i> Filter Data
+            <i class="bi bi-funnel"></i> Filter & Pencarian Data
         </div>
         <div class="card-body">
             <form method="GET" action="{{ route('jadwal.index') }}" class="row g-3">
                 {{-- Filter Nama Posyandu --}}
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="nama_posyandu" class="form-label">Nama Posyandu</label>
                     <select name="nama_posyandu" id="nama_posyandu" class="form-select" onchange="this.form.submit()">
                         <option value="">Semua Posyandu</option>
@@ -33,7 +33,7 @@
                 </div>
 
                 {{-- Filter Tema --}}
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="tema" class="form-label">Tema</label>
                     <select name="tema" id="tema" class="form-select" onchange="this.form.submit()">
                         <option value="">Semua Tema</option>
@@ -45,15 +45,46 @@
                     </select>
                 </div>
 
+                {{-- TAMBAH INI: Search --}}
+                <div class="col-md-4">
+                    <label for="search" class="form-label">Pencarian</label>
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" 
+                               value="{{ request('search') }}" 
+                               placeholder="Cari nama posyandu, tema, atau keterangan..." 
+                               aria-label="Search">
+                        <button type="submit" class="input-group-text" id="basic-addon2">
+                            <i class="bi bi-search"></i>
+                        </button>
+                        {{-- Clear Search --}}
+                        @if(request('search'))
+                            <a href="{{ request()->fullUrlWithQuery(['search' => null]) }}" 
+                               class="btn btn-outline-secondary ms-2" 
+                               id="clear-search">
+                                Clear
+                            </a>
+                        @endif
+                    </div>
+                </div>
+
                 {{-- Tombol Reset --}}
-                <div class="col-md-4 d-flex align-items-end">
-                    <a href="{{ route('jadwal.index') }}" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-clockwise"></i> Reset Filter
+                <div class="col-md-2 d-flex align-items-end">
+                    <a href="{{ route('jadwal.index') }}" class="btn btn-outline-secondary w-100">
+                        <i class="bi bi-arrow-clockwise"></i> Reset
                     </a>
                 </div>
             </form>
         </div>
     </div>
+
+    {{-- Info Hasil Pencarian --}}
+    @if(request('search'))
+        <div class="alert alert-info mb-3">
+            <i class="bi bi-info-circle"></i> 
+            Hasil pencarian untuk: <strong>"{{ request('search') }}"</strong>
+            <span class="badge bg-primary ms-2">{{ $jadwal->total() }} data ditemukan</span>
+        </div>
+    @endif
 
     {{-- Tabel Data --}}
     <table class="table table-bordered">

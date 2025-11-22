@@ -9,27 +9,29 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     // Tampilkan semua user
-    public function index(Request $request) // TAMBAH Request $request
+    public function index(Request $request)
     {
-        // TAMBAH INI: Kolom yang bisa di-filter
+        // Kolom yang bisa di-filter
         $filterableColumns = ['role'];
-        
-        // UBAH INI: Tambahkan filter dan withQueryString()
+        // TAMBAH INI: Kolom yang bisa dicari
+        $searchableColumns = ['name', 'email'];
+
+        // UBAH INI: Tambahkan search()
         $users = User::orderBy('created_at', 'DESC')
             ->filter($request, $filterableColumns)
+            ->search($request, $searchableColumns) // TAMBAH INI
             ->paginate(10)
             ->withQueryString();
 
         return view('pages.user.index', compact('users'));
     }
 
-    // Form tambah user
+    // Method lainnya tetap sama...
     public function create()
     {
         return view('pages.user.create');
     }
 
-    // Simpan user baru
     public function store(Request $request)
     {
         $request->validate([
@@ -49,13 +51,11 @@ class UserController extends Controller
         return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan!');
     }
 
-    // Form edit user
     public function edit(User $user)
     {
         return view('pages.user.edit', compact('user'));
     }
 
-    // Update user
     public function update(Request $request, User $user)
     {
         $request->validate([
@@ -77,7 +77,6 @@ class UserController extends Controller
         return redirect()->route('user.index')->with('success', 'Data user berhasil diperbarui!');
     }
 
-    // Hapus user
     public function destroy(User $user)
     {
         $user->delete();

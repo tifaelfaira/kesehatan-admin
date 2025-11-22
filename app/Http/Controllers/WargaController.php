@@ -3,23 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Warga;
-use Illuminate\Http\Request; // PASTIKAN INI ADA
+use Illuminate\Http\Request;
 
 class WargaController extends Controller
 {
     // Tampilkan semua warga
-    public function index(Request $request) // TAMBAH Request $request
+    public function index(Request $request)
     {
-        // TAMBAH INI: Kolom yang bisa di-filter
+        // Kolom yang bisa di-filter
         $filterableColumns = ['jenis_kelamin', 'pekerjaan'];
-        
-        // UBAH INI: Tambahkan filter dan withQueryString()
+        // TAMBAH INI: Kolom yang bisa dicari
+        $searchableColumns = ['nama', 'nik', 'alamat', 'pekerjaan'];
+
+        // UBAH INI: Tambahkan search()
         $warga = Warga::orderBy('created_at', 'DESC')
             ->filter($request, $filterableColumns)
+            ->search($request, $searchableColumns) // TAMBAH INI
             ->paginate(10)
             ->withQueryString();
 
-        // TAMBAH INI: Data untuk dropdown filter
+        // Data untuk dropdown filter
         $pekerjaanList = Warga::whereNotNull('pekerjaan')
             ->distinct()
             ->pluck('pekerjaan');
