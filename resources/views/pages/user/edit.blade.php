@@ -6,7 +6,7 @@
 <div class="container">
   <h4 class="mb-4">✏️ Edit User</h4>
 
-  <form action="{{ route('user.update', $user->id) }}" method="POST" class="shadow-sm p-4 bg-white rounded">
+  <form action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -26,6 +26,28 @@
       <label>Password (Opsional)</label>
       <input type="password" name="password" class="form-control">
       <small class="text-muted">Kosongkan jika tidak ingin mengubah password.</small>
+    </div>
+
+    <div class="mb-3">
+      <label>Role</label>
+      <select name="role" class="form-control">
+        <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+        <option value="guest" {{ old('role', $user->role) == 'guest' ? 'selected' : '' }}>Guest</option>
+      </select>
+      @error('role') <small class="text-danger">{{ $message }}</small> @enderror
+    </div>
+
+    {{-- TAMBAHAN: Input Foto Profil --}}
+    <div class="mb-3">
+      <label for="profile_picture">Foto Profil</label>
+      <input type="file" name="profile_picture" class="form-control">
+      @if($user->profile_picture)
+        <div class="mt-2">
+          <img src="{{ Storage::url($user->profile_picture) }}" width="100" class="img-thumbnail">
+          <p class="text-muted small mt-1">Foto profil saat ini</p>
+        </div>
+      @endif
+      @error('profile_picture') <small class="text-danger">{{ $message }}</small> @enderror
     </div>
 
     <button type="submit" class="btn btn-warning">Update</button>

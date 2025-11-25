@@ -13,16 +13,12 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
+        'profile_picture', // TAMBAH INI
     ];
 
     /**
@@ -59,7 +55,7 @@ class User extends Authenticatable
         return $query;
     }
 
-    // TAMBAH INI: Scope untuk search
+    // Scope untuk search
     public function scopeSearch($query, $request, array $columns)
     {
         if ($request->filled('search')) {

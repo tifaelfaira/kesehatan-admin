@@ -24,7 +24,7 @@
 
             <!-- DASHBOARD -->
             <div class="menu-item">
-                <a href="{{ url('/admin/dashboard') }}" 
+                <a href="{{ route('admin.dashboard') }}" 
                    class="menu-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
                     <i class="bi bi-house"></i>
                     <span>Dashboard</span>
@@ -36,14 +36,13 @@
                 <small class="section-label">Fitur Utama</small>
 
                 <div class="menu-item">
-                    <a href="{{ url('/admin/jadwal') }}" 
+                    <a href="{{ route('jadwal.index') }}" 
                        class="menu-link {{ request()->is('admin/jadwal*') ? 'active' : '' }}">
                         <i class="bi bi-calendar-check"></i>
-                        <span>Jadwal Posyandu</span> <!-- Diubah dari "Jadwal Kesehatan" -->
+                        <span>Jadwal Posyandu</span>
                     </a>
                 </div>
 
-                <!-- Tambahkan menu Layanan Posyandu di Fitur Utama juga -->
                 <div class="menu-item">
                     <a href="{{ route('admin.layanan-posyandu.index') }}"
                        class="menu-link {{ request()->is('admin/layanan-posyandu*') ? 'active' : '' }}">
@@ -58,7 +57,7 @@
                 <small class="section-label">Master Data</small>
 
                 <div class="menu-item">
-                    <a href="{{ url('/admin/user') }}" 
+                    <a href="{{ route('user.index') }}" 
                        class="menu-link {{ request()->is('admin/user*') ? 'active' : '' }}">
                         <i class="bi bi-person-badge"></i>
                         <span>Data User</span>
@@ -66,33 +65,22 @@
                 </div>
 
                 <div class="menu-item">
-                    <a href="{{ url('/admin/warga') }}" 
+                    <a href="{{ route('warga.index') }}" 
                        class="menu-link {{ request()->is('admin/warga*') ? 'active' : '' }}">
                         <i class="bi bi-people"></i>
                         <span>Data Warga</span>
                     </a>
                 </div>
 
-                <!-- Opsional: Bisa dihapus dari sini jika sudah dipindah ke Fitur Utama -->
-                <!--
+                <!-- Menu Pelanggan -->
                 <div class="menu-item">
-                    <a href="{{ route('admin.layanan-posyandu.index') }}"
-                       class="menu-link {{ request()->is('admin/layanan-posyandu*') ? 'active' : '' }}">
-                        <i class="bi bi-hospital"></i>
-                        <span>Layanan Posyandu</span>
+                    <a href="{{ route('pelanggan.index') }}" 
+                       class="menu-link {{ request()->is('admin/pelanggan*') ? 'active' : '' }}">
+                        <i class="bi bi-person-lines-fill"></i>
+                        <span>Data Pelanggan</span>
                     </a>
                 </div>
-                -->
 
-            </div>
-
-            <!-- LAPORAN -->
-            <div class="menu-item">
-                <a href="{{ url('/admin/laporan') }}" 
-                   class="menu-link {{ request()->is('admin/laporan*') ? 'active' : '' }}">
-                    <i class="bi bi-file-earmark-text"></i>
-                    <span>Laporan</span>
-                </a>
             </div>
 
         </div>

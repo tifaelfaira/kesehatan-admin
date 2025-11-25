@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\JadwalPosyanduController; // Ganti controller
+use App\Http\Controllers\JadwalPosyanduController;
 use App\Http\Controllers\KesehatanController;
 use App\Http\Controllers\WargaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LayananPosyanduController;
+use App\Http\Controllers\PelangganController; // TAMBAHKAN
+use App\Http\Controllers\MultipleuploadsController; // TAMBAHKAN
 
 // ===============================
 // AUTH (Login & Register)
@@ -28,10 +30,17 @@ Route::prefix('auth')->group(function () {
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    Route::resource('jadwal', JadwalPosyanduController::class); // Ganti controller
+    Route::resource('jadwal', JadwalPosyanduController::class);
     Route::resource('warga', WargaController::class);
     Route::resource('user', UserController::class);
     Route::resource('kesehatan', KesehatanController::class);
+
+    // TAMBAHKAN: Routes untuk Pelanggan
+    Route::resource('pelanggan', PelangganController::class);
+
+    // TAMBAHKAN: Routes untuk Multiple Uploads
+    Route::post('/multipleuploads/store', [MultipleuploadsController::class, 'store'])->name('multipleuploads.store');
+    Route::delete('/multipleuploads/{id}', [MultipleuploadsController::class, 'destroy'])->name('multipleuploads.destroy');
 
     // CRUD Layanan Posyandu
     Route::resource('layanan-posyandu', LayananPosyanduController::class)
