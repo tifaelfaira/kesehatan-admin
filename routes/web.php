@@ -11,8 +11,6 @@ use App\Http\Controllers\KesehatanController;
 use App\Http\Controllers\WargaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LayananPosyanduController;
-use App\Http\Controllers\PelangganController; // TAMBAHKAN
-use App\Http\Controllers\MultipleuploadsController; // TAMBAHKAN
 
 // TAMBAHAN: Import controller baru
 use App\Http\Controllers\PosyanduController;
