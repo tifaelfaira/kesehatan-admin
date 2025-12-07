@@ -12,7 +12,8 @@ class PosyanduController extends Controller
      */
     public function index()
     {
-        $posyandu = Posyandu::orderBy('nama')->get();
+        // TAMBAHKAN PAGINATE
+        $posyandu = Posyandu::orderBy('nama')->paginate(10);
         return view('pages.posyandu.index', compact('posyandu'));
     }
 

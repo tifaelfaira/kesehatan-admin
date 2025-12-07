@@ -40,7 +40,7 @@
                     <tbody>
                         @foreach($catatan as $key => $item)
                         <tr>
-                            <td>{{ $key + 1 }}</td>
+                            <td>{{ ($catatan->currentPage() - 1) * $catatan->perPage() + $key + 1 }}</td>
                             <td>{{ $item->warga->nama ?? '-' }}</td>
                             <td>{{ $item->warga->nik ?? '-' }}</td>
                             <td>{{ $item->jenis_vaksin }}</td>
@@ -72,6 +72,11 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            
+            <!-- TAMBAHKAN PAGINATION BOOTSTRAP 5 -->
+            <div class="mt-3">
+                {{ $catatan->links('pagination::bootstrap-5') }}
             </div>
         </div>
     </div>

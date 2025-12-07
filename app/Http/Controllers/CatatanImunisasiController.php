@@ -10,9 +10,11 @@ class CatatanImunisasiController extends Controller
 {
     public function index()
     {
+        // TAMBAHKAN PAGINATE dengan onEachSide(2)
         $catatan = CatatanImunisasi::with('warga')
             ->orderBy('tanggal', 'desc')
-            ->get();
+            ->paginate(10)
+            ->onEachSide(2); // Menampilkan 2 halaman sebelum dan sesudah
         
         return view('pages.catatan_imunisasi.index', compact('catatan'));
     }
@@ -41,7 +43,6 @@ class CatatanImunisasiController extends Controller
             'nakes' => $request->nakes,
         ]);
 
-        // PERBAIKAN: Ganti route menjadi 'admin.catatan-imunisasi.index'
         return redirect()->route('admin.catatan-imunisasi.index')
             ->with('success', 'Catatan imunisasi berhasil ditambahkan.');
     }
@@ -79,7 +80,6 @@ class CatatanImunisasiController extends Controller
             'nakes' => $request->nakes,
         ]);
 
-        // PERBAIKAN: Ganti route menjadi 'admin.catatan-imunisasi.index'
         return redirect()->route('admin.catatan-imunisasi.index')
             ->with('success', 'Catatan imunisasi berhasil diperbarui.');
     }
@@ -89,7 +89,6 @@ class CatatanImunisasiController extends Controller
         $catatanImunisasi = CatatanImunisasi::findOrFail($id);
         $catatanImunisasi->delete();
 
-        // PERBAIKAN: Ganti route menjadi 'admin.catatan-imunisasi.index'
         return redirect()->route('admin.catatan-imunisasi.index')
             ->with('success', 'Catatan imunisasi berhasil dihapus.');
     }

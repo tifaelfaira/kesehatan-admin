@@ -38,7 +38,7 @@
                     <tbody>
                         @foreach($posyandu as $key => $item)
                         <tr>
-                            <td>{{ $key + 1 }}</td>
+                            <td>{{ ($posyandu->currentPage() - 1) * $posyandu->perPage() + $key + 1 }}</td>
                             <td>{{ $item->nama }}</td>
                             <td>{{ Str::limit($item->alamat, 50) }}</td>
                             <td>{{ $item->rt }}/{{ $item->rw }}</td>
@@ -68,6 +68,11 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            
+            <!-- TAMBAHKAN PAGINATION BOOTSTRAP 5 -->
+            <div class="mt-3">
+                {{ $posyandu->links('pagination::bootstrap-5') }}
             </div>
         </div>
     </div>
