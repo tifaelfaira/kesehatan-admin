@@ -2,83 +2,177 @@
 
 @section('content')
 <div class="container">
-    <h2>Catatan Imunisasi</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Catatan Imunisasi</h2>
+        <a href="{{ route('admin.catatan-imunisasi.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Tambah Catatan
+        </a>
+    </div>
     
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
-    <div class="d-flex justify-content-between mb-3">
-        <div>
-            <a href="{{ route('admin.catatan-imunisasi.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Tambah Catatan
-            </a>
-        </div>
-    </div>
-
-    <div class="card">
+    <div class="card shadow-sm">
         <div class="card-body">
+            <!-- FORM FILTER -->
+            <form method="GET" action="{{ route('admin.catatan-imunisasi.index') }}" class="mb-4">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label small mb-1">Nama Warga</label>
+                        <input type="text" 
+                               name="nama_warga" 
+                               class="form-control" 
+                               placeholder="Cari nama warga..."
+                               value="{{ request('nama_warga') }}">
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label class="form-label small mb-1">Jenis Vaksin</label>
+                        <select name="jenis_vaksin" class="form-select">
+                            <option value="">Semua Jenis</option>
+                            @foreach($jenisVaksinList as $jenis)
+                                <option value="{{ $jenis }}" {{ request('jenis_vaksin') == $jenis ? 'selected' : '' }}>
+                                    {{ $jenis }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label class="form-label small mb-1">Tanggal Mulai</label>
+                        <input type="date" 
+                               name="tanggal_dari" 
+                               class="form-control" 
+                               value="{{ request('tanggal_dari') }}">
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label class="form-label small mb-1">Tanggal Akhir</label>
+                        <input type="date" 
+                               name="tanggal_sampai" 
+                               class="form-control" 
+                               value="{{ request('tanggal_sampai') }}">
+                    </div>
+                    
+                    <div class="col-md-3 d-flex gap-2">
+                        <div class="flex-fill">
+                            <button type="submit" class="btn btn-primary w-100 h-100 d-flex align-items-center justify-content-center">
+                                <i class="fas fa-search me-2"></i>Cari
+                            </button>
+                        </div>
+                        <div class="flex-fill">
+                            <a href="{{ route('admin.catatan-imunisasi.index') }}" class="btn btn-outline-secondary w-100 h-100 d-flex align-items-center justify-content-center">
+                                <i class="fas fa-undo me-2"></i>Reset
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
             <div class="table-responsive">
-                <table class="table table-bordered table-striped">
-                    <thead class="thead-dark">
+                <table class="table table-hover table-bordered">
+                    <thead class="table-light">
                         <tr>
-                            <th>No</th>
+                            <th width="50">No</th>
                             <th>Nama Warga</th>
                             <th>NIK</th>
                             <th>Jenis Vaksin</th>
-                            <th>Tanggal</th>
+                            <th width="120">Tanggal</th>
                             <th>Lokasi</th>
                             <th>Nakes</th>
-                            <th>Aksi</th>
+                            <th width="200" class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($catatan as $key => $item)
+                        @forelse($catatan as $key => $item)
                         <tr>
-                            <td>{{ ($catatan->currentPage() - 1) * $catatan->perPage() + $key + 1 }}</td>
+                            <td class="text-center">{{ ($catatan->currentPage() - 1) * $catatan->perPage() + $key + 1 }}</td>
                             <td>{{ $item->warga->nama ?? '-' }}</td>
                             <td>{{ $item->warga->nik ?? '-' }}</td>
-                            <td>{{ $item->jenis_vaksin }}</td>
+                            <td>
+                                <span class="badge bg-info">{{ $item->jenis_vaksin }}</span>
+                            </td>
                             <td>{{ date('d/m/Y', strtotime($item->tanggal)) }}</td>
                             <td>{{ $item->lokasi }}</td>
                             <td>{{ $item->nakes }}</td>
                             <td>
-                                <div class="btn-group" role="group">
+                                <div class="d-flex gap-2 justify-content-center">
                                     <a href="{{ route('admin.catatan-imunisasi.show', $item->imunisasi_id) }}" 
-                                       class="btn btn-info btn-sm">
-                                        <i class="fas fa-eye"></i> Detail
+                                       class="btn btn-sm btn-info d-flex align-items-center">
+                                        <i class="fas fa-eye me-1"></i>Detail
                                     </a>
                                     <a href="{{ route('admin.catatan-imunisasi.edit', $item->imunisasi_id) }}" 
-                                       class="btn btn-warning btn-sm">
-                                        <i class="fas fa-edit"></i> Edit
+                                       class="btn btn-sm btn-warning d-flex align-items-center">
+                                        <i class="fas fa-edit me-1"></i>Edit
                                     </a>
                                     <form action="{{ route('admin.catatan-imunisasi.destroy', $item->imunisasi_id) }}" 
-                                          method="POST" style="display: inline;">
+                                          method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" 
+                                        <button type="submit" class="btn btn-sm btn-danger d-flex align-items-center" 
                                                 onclick="return confirm('Yakin hapus data?')">
-                                            <i class="fas fa-trash"></i> Hapus
+                                            <i class="fas fa-trash me-1"></i>Hapus
                                         </button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <div class="text-muted">
+                                    <i class="fas fa-inbox fa-2x mb-3"></i>
+                                    <p class="mb-0">Tidak ada data ditemukan</p>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
             
-            <!-- TAMBAHKAN PAGINATION BOOTSTRAP 5 -->
-            <div class="mt-3">
+            <!-- PAGINATION -->
+            <div class="mt-4">
                 {{ $catatan->links('pagination::bootstrap-5') }}
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .form-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #6c757d;
+    }
+    
+    .table th {
+        font-weight: 600;
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    .table tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+    
+    .badge {
+        font-size: 0.85em;
+        padding: 0.35em 0.65em;
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.875rem;
+        white-space: nowrap;
+    }
+    
+    .btn-sm i {
+        font-size: 0.8rem;
+    }
+</style>
 @endsection

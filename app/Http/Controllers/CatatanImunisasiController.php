@@ -8,15 +8,22 @@ use Illuminate\Http\Request;
 
 class CatatanImunisasiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // TAMBAHKAN PAGINATE dengan onEachSide(2)
+        // Ambil daftar jenis vaksin unik untuk dropdown
+        $jenisVaksinList = CatatanImunisasi::distinct()->orderBy('jenis_vaksin')->pluck('jenis_vaksin');
+        
+        $filterableColumns = ['jenis_vaksin', 'nama_warga', 'tanggal_dari', 'tanggal_sampai'];
+        
+        // TAMBAHKAN FILTER
         $catatan = CatatanImunisasi::with('warga')
+            ->filter($request, $filterableColumns)
             ->orderBy('tanggal', 'desc')
             ->paginate(10)
-            ->onEachSide(2); // Menampilkan 2 halaman sebelum dan sesudah
+            ->onEachSide(2)
+            ->withQueryString();
         
-        return view('pages.catatan_imunisasi.index', compact('catatan'));
+        return view('pages.catatan_imunisasi.index', compact('catatan', 'jenisVaksinList'));
     }
 
     public function create()

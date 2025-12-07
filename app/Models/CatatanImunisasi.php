@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,16 +15,36 @@ class CatatanImunisasi extends Model
 
     protected $fillable = [
         'warga_id',
-        'jenis_vaksin',  // PERBAIKAN: ganti jadi jenis_vaksin
+        'jenis_vaksin',
         'tanggal',
         'lokasi',
         'nakes',
-        
     ];
 
     protected $casts = [
         'tanggal' => 'date',
     ];
+
+    // Scope untuk filter
+    public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder
+    {
+        foreach ($filterableColumns as $column) {
+            if ($request->filled($column)) {
+                if ($column === 'tanggal_dari') {
+                    $query->whereDate('tanggal', '>=', $request->input($column));
+                } elseif ($column === 'tanggal_sampai') {
+                    $query->whereDate('tanggal', '<=', $request->input($column));
+                } elseif ($column === 'nama_warga') {
+                    $query->whereHas('warga', function($q) use ($request) {
+                        $q->where('nama', 'like', '%' . $request->input('nama_warga') . '%');
+                    });
+                } else {
+                    $query->where($column, 'like', '%' . $request->input($column) . '%');
+                }
+            }
+        }
+        return $query;
+    }
 
     public function warga()
     {

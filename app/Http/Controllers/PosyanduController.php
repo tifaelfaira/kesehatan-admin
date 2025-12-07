@@ -10,10 +10,16 @@ class PosyanduController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // TAMBAHKAN PAGINATE
-        $posyandu = Posyandu::orderBy('nama')->paginate(10);
+        $filterableColumns = ['nama', 'alamat'];
+        
+        // TAMBAHKAN FILTER
+        $posyandu = Posyandu::filter($request, $filterableColumns)
+            ->orderBy('nama')
+            ->paginate(10)
+            ->withQueryString();
+            
         return view('pages.posyandu.index', compact('posyandu'));
     }
 

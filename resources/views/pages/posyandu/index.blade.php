@@ -24,6 +24,40 @@
     <div class="card">
         <div class="card-body">
             <div class="table-responsive">
+                <!-- FORM FILTER -->
+                <form method="GET" action="{{ route('admin.posyandu.index') }}" class="mb-3">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <input type="text" 
+                                       name="nama" 
+                                       class="form-control" 
+                                       placeholder="Cari nama posyandu..."
+                                       value="{{ request('nama') }}">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <input type="text" 
+                                       name="alamat" 
+                                       class="form-control" 
+                                       placeholder="Cari alamat..."
+                                       value="{{ request('alamat') }}">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search"></i> Filter
+                            </button>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="{{ route('admin.posyandu.index') }}" class="btn btn-secondary w-100">
+                                <i class="fas fa-undo"></i> Reset
+                            </a>
+                        </div>
+                    </div>
+                </form>
+
                 <table class="table table-bordered table-striped">
                     <thead class="thead-dark">
                         <tr>
@@ -36,7 +70,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($posyandu as $key => $item)
+                        @forelse($posyandu as $key => $item)
                         <tr>
                             <td>{{ ($posyandu->currentPage() - 1) * $posyandu->perPage() + $key + 1 }}</td>
                             <td>{{ $item->nama }}</td>
@@ -65,12 +99,16 @@
                                 </div>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="6" class="text-center">Tidak ada data ditemukan</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
             
-            <!-- TAMBAHKAN PAGINATION BOOTSTRAP 5 -->
+            <!-- PAGINATION -->
             <div class="mt-3">
                 {{ $posyandu->links('pagination::bootstrap-5') }}
             </div>
