@@ -24,7 +24,7 @@
 
             <!-- DASHBOARD -->
             <div class="menu-item">
-                <a href="{{ url('/admin/dashboard') }}" 
+                <a href="{{ route('admin.dashboard') }}" 
                    class="menu-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
                     <i class="bi bi-house"></i>
                     <span>Dashboard</span>
@@ -36,7 +36,7 @@
                 <small class="section-label">Fitur Utama</small>
 
                 <div class="menu-item">
-                    <a href="{{ url('/admin/jadwal') }}" 
+                    <a href="{{ route('jadwal.index') }}" 
                        class="menu-link {{ request()->is('admin/jadwal*') ? 'active' : '' }}">
                         <i class="bi bi-calendar-check"></i>
                         <span>Jadwal Posyandu</span>
@@ -75,7 +75,7 @@
                 <small class="section-label">Master Data</small>
 
                 <div class="menu-item">
-                    <a href="{{ url('/admin/user') }}" 
+                    <a href="{{ route('user.index') }}" 
                        class="menu-link {{ request()->is('admin/user*') ? 'active' : '' }}">
                         <i class="bi bi-person-badge"></i>
                         <span>Data User</span>
@@ -83,7 +83,7 @@
                 </div>
 
                 <div class="menu-item">
-                    <a href="{{ url('/admin/warga') }}" 
+                    <a href="{{ route('warga.index') }}" 
                        class="menu-link {{ request()->is('admin/warga*') ? 'active' : '' }}">
                         <i class="bi bi-people"></i>
                         <span>Data Warga</span>

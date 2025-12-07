@@ -47,6 +47,24 @@
       @error('password') <small class="text-danger">{{ $message }}</small> @enderror
     </div>
 
+    <div class="mb-3">
+      <label>Role</label>
+      <select name="role" class="form-control" required>
+        <option value="">Pilih Role</option>
+        <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+        <option value="guest" {{ old('role') == 'guest' ? 'selected' : '' }}>Guest</option>
+      </select>
+      @error('role') <small class="text-danger">{{ $message }}</small> @enderror
+    </div>
+
+    {{-- Input Foto Profil --}}
+    <div class="mb-3">
+      <label for="profile_picture">Foto Profil</label>
+      <input type="file" name="profile_picture" class="form-control">
+      <small class="text-muted">Format: jpeg, png, jpg | Maksimal: 150MB</small>
+      @error('profile_picture') <small class="text-danger">{{ $message }}</small> @enderror
+    </div>
+
     <button type="submit" class="btn btn-primary">Simpan</button>
     <a href="/admin/user" class="btn btn-secondary">Kembali</a>
   </form>
