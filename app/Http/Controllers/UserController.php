@@ -5,28 +5,25 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
     // Tampilkan semua user
     public function index(Request $request)
     {
-        // Kolom yang bisa di-filter
         $filterableColumns = ['role'];
-        // TAMBAH INI: Kolom yang bisa dicari
         $searchableColumns = ['name', 'email'];
 
-        // UBAH INI: Tambahkan search()
         $users = User::orderBy('created_at', 'DESC')
             ->filter($request, $filterableColumns)
-            ->search($request, $searchableColumns) // TAMBAH INI
+            ->search($request, $searchableColumns)
             ->paginate(10)
             ->withQueryString();
 
         return view('pages.user.index', compact('users'));
     }
 
-    // Method lainnya tetap sama...
     public function create()
     {
         return view('pages.user.create');
@@ -48,7 +45,8 @@ class UserController extends Controller
             'role' => $request->role,
         ]);
 
-        return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan!');
+        // PERBAIKAN: Gunakan URL langsung
+        return redirect('/admin/user')->with('success', 'User berhasil ditambahkan!');
     }
 
     public function edit(User $user)
@@ -60,26 +58,36 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|min:3',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->ignore($user->id),
+            ],
             'password' => 'nullable|min:6',
             'role' => 'required|in:admin,guest',
         ]);
 
-        $user->update([
+        $data = [
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
-            'password' => $request->filled('password')
-                ? Hash::make($request->password)
-                : $user->password,
-        ]);
+        ];
 
-        return redirect()->route('user.index')->with('success', 'Data user berhasil diperbarui!');
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $user->update($data);
+
+        // PERBAIKAN: Gunakan URL langsung
+        return redirect('/admin/user')->with('success', 'Data user berhasil diperbarui!');
     }
 
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->route('user.index')->with('success', 'User berhasil dihapus!');
+        
+        // PERBAIKAN: Gunakan URL langsung
+        return redirect('/admin/user')->with('success', 'User berhasil dihapus!');
     }
 }

@@ -45,4 +45,41 @@ class Warga extends Model
         }
         return $query;
     }
+
+    // ========== TAMBAHAN UNTUK RELASI DENGAN CATATAN IMUNISASI ==========
+    
+    /**
+     * Relasi ke tabel catatan_imunisasi (satu warga bisa punya banyak catatan imunisasi)
+     */
+    public function catatanImunisasi()
+    {
+        return $this->hasMany(CatatanImunisasi::class, 'warga_id');
+    }
+
+    /**
+     * Accessor untuk menampilkan nama lengkap dengan NIK (format dropdown)
+     */
+    public function getNamaLengkapAttribute()
+    {
+        return $this->nama . ' (NIK: ' . $this->nik . ')';
+    }
+
+    /**
+     * Scope untuk mengambil data warga dalam format dropdown
+     */
+    public function scopeForDropdown($query)
+    {
+        return $query->select('id', 'nama', 'nik')->orderBy('nama');
+    }
+
+    /**
+     * Method untuk mendapatkan data warga dalam format array untuk select2
+     */
+    public function toArrayForSelect()
+    {
+        return [
+            'id' => $this->id,
+            'text' => $this->nama . ' (NIK: ' . $this->nik . ')'
+        ];
+    }
 }

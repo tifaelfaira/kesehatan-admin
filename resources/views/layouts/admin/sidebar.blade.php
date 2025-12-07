@@ -39,16 +39,33 @@
                     <a href="{{ url('/admin/jadwal') }}" 
                        class="menu-link {{ request()->is('admin/jadwal*') ? 'active' : '' }}">
                         <i class="bi bi-calendar-check"></i>
-                        <span>Jadwal Posyandu</span> <!-- Diubah dari "Jadwal Kesehatan" -->
+                        <span>Jadwal Posyandu</span>
                     </a>
                 </div>
 
-                <!-- Tambahkan menu Layanan Posyandu di Fitur Utama juga -->
                 <div class="menu-item">
                     <a href="{{ route('admin.layanan-posyandu.index') }}"
                        class="menu-link {{ request()->is('admin/layanan-posyandu*') ? 'active' : '' }}">
                         <i class="bi bi-hospital"></i>
                         <span>Layanan Posyandu</span>
+                    </a>
+                </div>
+
+                <!-- TAMBAHAN: Menu Data Posyandu -->
+                <div class="menu-item">
+                    <a href="{{ route('admin.posyandu.index') }}" 
+                       class="menu-link {{ request()->is('admin/posyandu*') ? 'active' : '' }}">
+                        <i class="bi bi-clipboard-plus"></i>
+                        <span>Data Posyandu</span>
+                    </a>
+                </div>
+
+                <!-- TAMBAHAN: Menu Catatan Imunisasi -->
+                <div class="menu-item">
+                    <a href="{{ route('admin.catatan-imunisasi.index') }}" 
+                       class="menu-link {{ request()->is('admin/catatan-imunisasi*') ? 'active' : '' }}">
+                        <i class="bi bi-file-medical"></i>
+                        <span>Catatan Imunisasi</span>
                     </a>
                 </div>
             </div>
@@ -73,27 +90,11 @@
                     </a>
                 </div>
 
-                <!-- Opsional: Bisa dihapus dari sini jika sudah dipindah ke Fitur Utama -->
-                <!--
-                <div class="menu-item">
-                    <a href="{{ route('admin.layanan-posyandu.index') }}"
-                       class="menu-link {{ request()->is('admin/layanan-posyandu*') ? 'active' : '' }}">
-                        <i class="bi bi-hospital"></i>
-                        <span>Layanan Posyandu</span>
-                    </a>
-                </div>
-                -->
+                <!-- MENU DATA KESEHATAN DIHAPUS -->
 
             </div>
 
-            <!-- LAPORAN -->
-            <div class="menu-item">
-                <a href="{{ url('/admin/laporan') }}" 
-                   class="menu-link {{ request()->is('admin/laporan*') ? 'active' : '' }}">
-                    <i class="bi bi-file-earmark-text"></i>
-                    <span>Laporan</span>
-                </a>
-            </div>
+            <!-- MENU LAPORAN DIHAPUS -->
 
         </div>
     </div>

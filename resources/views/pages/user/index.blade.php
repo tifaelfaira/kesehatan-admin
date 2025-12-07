@@ -11,7 +11,7 @@
     </h4>
     <div>
       <span class="badge bg-success me-2">Total: {{ $users->total() }} User</span>
-      <a href="{{ route('user.create') }}" class="btn btn-primary">
+      <a href="/admin/user/create" class="btn btn-primary">
         <i class="bi bi-person-plus-fill"></i> Tambah User
       </a>
     </div>
@@ -30,7 +30,7 @@
       <i class="bi bi-funnel"></i> Filter & Pencarian Data
     </div>
     <div class="card-body">
-      <form method="GET" action="{{ route('user.index') }}" class="row g-3">
+      <form method="GET" action="/admin/user" class="row g-3">
         {{-- Filter Role --}}
         <div class="col-md-3">
           <label for="role" class="form-label">Role</label>
@@ -41,7 +41,7 @@
           </select>
         </div>
 
-        {{-- TAMBAH INI: Search --}}
+        {{-- Search --}}
         <div class="col-md-6">
           <label for="search" class="form-label">Pencarian</label>
           <div class="input-group">
@@ -52,7 +52,6 @@
             <button type="submit" class="input-group-text" id="basic-addon2">
               <i class="bi bi-search"></i>
             </button>
-            {{-- Clear Search --}}
             @if(request('search'))
               <a href="{{ request()->fullUrlWithQuery(['search' => null]) }}" 
                  class="btn btn-outline-secondary ms-2" 
@@ -65,7 +64,7 @@
 
         {{-- Tombol Reset --}}
         <div class="col-md-3 d-flex align-items-end">
-          <a href="{{ route('user.index') }}" class="btn btn-outline-secondary w-100">
+          <a href="/admin/user" class="btn btn-outline-secondary w-100">
             <i class="bi bi-arrow-clockwise"></i> Reset
           </a>
         </div>
@@ -121,10 +120,10 @@
               </td>
               <td>
                 <div class="btn-group" role="group">
-                  <a href="{{ route('user.edit', $user->id) }}" class="btn btn-sm btn-warning" title="Edit">
+                  <a href="/admin/user/{{ $user->id }}/edit" class="btn btn-sm btn-warning" title="Edit">
                     <i class="bi bi-pencil-square"></i>
                   </a>
-                  <form action="{{ route('user.destroy', $user->id) }}" method="POST" class="d-inline">
+                  <form action="/admin/user/{{ $user->id }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus user ini?')" title="Hapus">
@@ -140,7 +139,7 @@
                 <div class="text-center">
                   <i class="bi bi-people" style="font-size: 3rem;"></i>
                   <p class="mt-2">Belum ada pengguna terdaftar</p>
-                  <a href="{{ route('user.create') }}" class="btn btn-primary btn-sm">
+                  <a href="/admin/user/create" class="btn btn-primary btn-sm">
                     Tambah User Pertama
                   </a>
                 </div>

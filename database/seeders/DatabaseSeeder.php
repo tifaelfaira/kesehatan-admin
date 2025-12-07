@@ -15,13 +15,19 @@ class DatabaseSeeder extends Seeder
 
         // Seeder jadwal & warga
         $this->call([
-            \Database\Seeders\JadwalPosyanduSeeder::class,  // Sudah diganti dari JadwalKesehatanSeeder
+            \Database\Seeders\JadwalPosyanduSeeder::class,
             \Database\Seeders\WargaSeeder::class,
         ]);
 
         // Seeder layanan posyandu (menghubungkan jadwal & warga)
         $this->call([
             \Database\Seeders\LayananPosyanduSeeder::class,
+        ]);
+
+        // Seeder baru yang ditambahkan
+        $this->call([
+            \Database\Seeders\PosyanduSeeder::class,          // Seeder baru untuk Data Posyandu
+            \Database\Seeders\CatatanImunisasiSeeder::class,  // Seeder baru untuk Catatan Imunisasi
         ]);
     }
 }
