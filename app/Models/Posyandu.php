@@ -22,6 +22,18 @@ class Posyandu extends Model
         return $query;
     }
 
+    // Scope untuk search
+    public function scopeSearch($query, $request, array $columns)
+    {
+        if ($request->filled('search')) {
+            $query->where(function($q) use ($request, $columns) {
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'LIKE', '%' . $request->search . '%');
+                }
+            });
+        }
+    }
+
     // Relasi ke kader (jika ada)
     public function kader()
     {

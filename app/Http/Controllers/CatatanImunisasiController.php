@@ -14,10 +14,12 @@ class CatatanImunisasiController extends Controller
         $jenisVaksinList = CatatanImunisasi::distinct()->orderBy('jenis_vaksin')->pluck('jenis_vaksin');
         
         $filterableColumns = ['jenis_vaksin', 'nama_warga', 'tanggal_dari', 'tanggal_sampai'];
+        $searchableColumns = ['jenis_vaksin', 'lokasi', 'nakes', 'nama_warga'];
         
-        // TAMBAHKAN FILTER
+        // TAMBAHKAN FILTER DAN SEARCH
         $catatan = CatatanImunisasi::with('warga')
             ->filter($request, $filterableColumns)
+            ->search($request, $searchableColumns)
             ->orderBy('tanggal', 'desc')
             ->paginate(10)
             ->onEachSide(2)

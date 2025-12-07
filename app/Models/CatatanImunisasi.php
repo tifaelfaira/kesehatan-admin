@@ -46,6 +46,24 @@ class CatatanImunisasi extends Model
         return $query;
     }
 
+    // Scope untuk search
+    public function scopeSearch($query, $request, array $columns)
+    {
+        if ($request->filled('search')) {
+            $query->where(function($q) use ($request, $columns) {
+                foreach ($columns as $column) {
+                    if ($column === 'nama_warga') {
+                        $q->orWhereHas('warga', function($q2) use ($request) {
+                            $q2->where('nama', 'LIKE', '%' . $request->search . '%');
+                        });
+                    } else {
+                        $q->orWhere($column, 'LIKE', '%' . $request->search . '%');
+                    }
+                }
+            });
+        }
+    }
+
     public function warga()
     {
         return $this->belongsTo(Warga::class, 'warga_id', 'id');

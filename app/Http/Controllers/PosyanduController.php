@@ -13,9 +13,11 @@ class PosyanduController extends Controller
     public function index(Request $request)
     {
         $filterableColumns = ['nama', 'alamat'];
+        $searchableColumns = ['nama', 'alamat', 'rt', 'rw', 'kontak'];
         
-        // TAMBAHKAN FILTER
+        // TAMBAHKAN FILTER DAN SEARCH
         $posyandu = Posyandu::filter($request, $filterableColumns)
+            ->search($request, $searchableColumns)
             ->orderBy('nama')
             ->paginate(10)
             ->withQueryString();
