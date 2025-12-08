@@ -35,7 +35,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'role' => 'required|in:admin,guest',
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // VALIDASI FOTO
+            // HAPUS: 'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $data = [
@@ -45,15 +45,10 @@ class UserController extends Controller
             'role' => $request->role,
         ];
 
-        // Handle profile picture upload
-        if ($request->hasFile('profile_picture')) {
-            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
-            $data['profile_picture'] = $path;
-        }
+        // HAPUS: Bagian handle profile picture upload
 
         User::create($data);
 
-        // PERBAIKAN: Gunakan URL langsung
         return redirect('/admin/user')->with('success', 'User berhasil ditambahkan!');
     }
 
@@ -73,7 +68,7 @@ class UserController extends Controller
             ],
             'password' => 'nullable|min:6',
             'role' => 'required|in:admin,guest',
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // VALIDASI FOTO
+            // HAPUS: 'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $data = [
@@ -88,20 +83,14 @@ class UserController extends Controller
 
         $user->update($data);
 
-        // PERBAIKAN: Gunakan URL langsung
         return redirect('/admin/user')->with('success', 'Data user berhasil diperbarui!');
     }
 
     public function destroy(User $user)
     {
-        // Hapus foto profil jika ada
-        if ($user->profile_picture && Storage::disk('public')->exists($user->profile_picture)) {
-            Storage::disk('public')->delete($user->profile_picture);
-        }
-        
+        // HAPUS: Kode untuk hapus foto profil
         $user->delete();
         
-        // PERBAIKAN: Gunakan URL langsung
         return redirect('/admin/user')->with('success', 'User berhasil dihapus!');
     }
 }

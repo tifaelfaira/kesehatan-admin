@@ -54,27 +54,7 @@
       @error('password') <small class="text-danger">{{ $message }}</small> @enderror
     </div>
 
-    <div class="mb-3">
-      <label>Role</label>
-      <select name="role" class="form-control">
-        <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-        <option value="guest" {{ old('role', $user->role) == 'guest' ? 'selected' : '' }}>Guest</option>
-      </select>
-      @error('role') <small class="text-danger">{{ $message }}</small> @enderror
-    </div>
-
-    {{-- TAMBAHAN: Input Foto Profil --}}
-    <div class="mb-3">
-      <label for="profile_picture">Foto Profil</label>
-      <input type="file" name="profile_picture" class="form-control">
-      @if($user->profile_picture)
-        <div class="mt-2">
-          <img src="{{ Storage::url($user->profile_picture) }}" width="100" class="img-thumbnail">
-          <p class="text-muted small mt-1">Foto profil saat ini</p>
-        </div>
-      @endif
-      @error('profile_picture') <small class="text-danger">{{ $message }}</small> @enderror
-    </div>
+    {{-- HAPUS: Bagian input Foto Profil --}}
 
     <button type="submit" class="btn btn-warning">Update</button>
     <a href="/admin/user" class="btn btn-secondary">Kembali</a>

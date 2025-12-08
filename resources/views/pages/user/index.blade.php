@@ -90,7 +90,6 @@
         <thead class="table-primary text-center align-middle">
           <tr>
             <th>No</th>
-            <th>Foto</th> <!-- KOLOM BARU UNTUK FOTO -->
             <th>Nama</th>
             <th>Email</th>
             <th>Role</th>
@@ -102,15 +101,6 @@
           @forelse($users as $index => $user)
             <tr>
               <td>{{ $users->firstItem() + $index }}</td>
-              <td>
-                @if($user->profile_picture)
-                  <img src="{{ Storage::url($user->profile_picture) }}" width="40" height="40" class="rounded-circle object-fit-cover">
-                @else
-                  <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width:40px;height:40px;">
-                    <span class="text-white fw-bold">{{ substr($user->name, 0, 1) }}</span>
-                  </div>
-                @endif
-              </td>
               <td>
                 <i class="bi bi-person-circle text-primary"></i>
                 {{ $user->name }}
@@ -145,7 +135,7 @@
             </tr>
           @empty
             <tr>
-              <td colspan="7" class="text-muted py-4"> <!-- COLSPAN JADI 7 -->
+              <td colspan="6" class="text-muted py-4">
                 <div class="text-center">
                   <i class="bi bi-people" style="font-size: 3rem;"></i>
                   <p class="mt-2">Belum ada pengguna terdaftar</p>

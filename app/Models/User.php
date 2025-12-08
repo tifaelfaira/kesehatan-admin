@@ -16,7 +16,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'profile_picture', // TAMBAH INI
+        // HAPUS: 'profile_picture',
     ];
 
     protected $hidden = [
