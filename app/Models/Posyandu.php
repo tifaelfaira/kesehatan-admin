@@ -9,7 +9,7 @@ class Posyandu extends Model
 {
     protected $table = 'posyandu';
     protected $primaryKey = 'posyandu_id';
-    protected $fillable = ['nama', 'alamat', 'rt', 'rw', 'kontak'];
+    protected $fillable = ['nama', 'alamat', 'rt', 'rw', 'kontak', 'foto']; // TAMBAH 'foto'
 
     // Scope untuk filter
     public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Posyandu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PosyanduController extends Controller
 {
@@ -15,7 +16,6 @@ class PosyanduController extends Controller
         $filterableColumns = ['nama', 'alamat'];
         $searchableColumns = ['nama', 'alamat', 'rt', 'rw', 'kontak'];
         
-        // TAMBAHKAN FILTER DAN SEARCH
         $posyandu = Posyandu::filter($request, $filterableColumns)
             ->search($request, $searchableColumns)
             ->orderBy('nama')
@@ -44,9 +44,18 @@ class PosyanduController extends Controller
             'rt' => 'nullable|string|max:5',
             'rw' => 'nullable|string|max:5',
             'kontak' => 'nullable|string|max:20',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        Posyandu::create($request->all());
+        $data = $request->all();
+
+        // Handle foto upload
+        if ($request->hasFile('foto')) {
+            $path = $request->file('foto')->store('posyandu', 'public');
+            $data['foto'] = $path;
+        }
+
+        Posyandu::create($data);
 
         return redirect()->route('admin.posyandu.index')
             ->with('success', 'Data posyandu berhasil ditambahkan.');
@@ -79,9 +88,23 @@ class PosyanduController extends Controller
             'rt' => 'nullable|string|max:5',
             'rw' => 'nullable|string|max:5',
             'kontak' => 'nullable|string|max:20',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $posyandu->update($request->all());
+        $data = $request->all();
+
+        // Handle foto upload
+        if ($request->hasFile('foto')) {
+            // Hapus foto lama jika ada
+            if ($posyandu->foto && Storage::disk('public')->exists($posyandu->foto)) {
+                Storage::disk('public')->delete($posyandu->foto);
+            }
+            
+            $path = $request->file('foto')->store('posyandu', 'public');
+            $data['foto'] = $path;
+        }
+
+        $posyandu->update($data);
 
         return redirect()->route('admin.posyandu.index')
             ->with('success', 'Data posyandu berhasil diperbarui.');
@@ -92,6 +115,11 @@ class PosyanduController extends Controller
      */
     public function destroy(Posyandu $posyandu)
     {
+        // Hapus foto jika ada
+        if ($posyandu->foto && Storage::disk('public')->exists($posyandu->foto)) {
+            Storage::disk('public')->delete($posyandu->foto);
+        }
+
         $posyandu->delete();
 
         return redirect()->route('admin.posyandu.index')
