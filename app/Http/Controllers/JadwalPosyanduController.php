@@ -17,7 +17,7 @@ class JadwalPosyanduController extends Controller
         // UBAH INI: Tambahkan search()
         $jadwal = JadwalPosyandu::latest()
             ->filter($request, $filterableColumns)
-            ->search($request, $searchableColumns) // TAMBAH INI
+            ->search($request, $searchableColumns)
             ->paginate(10)
             ->withQueryString();
 
@@ -28,7 +28,22 @@ class JadwalPosyanduController extends Controller
         return view('pages.jadwal_posyandu.index', compact('jadwal', 'namaPosyanduList', 'temaList'));
     }
 
-    // Method lainnya tetap sama...
+    public function show($jadwal_id)
+    {
+        $jadwal = JadwalPosyandu::findOrFail($jadwal_id);
+        
+        // Hitung prev dan next di controller
+        $prev = JadwalPosyandu::where('jadwal_id', '<', $jadwal->jadwal_id)
+            ->latest('jadwal_id')
+            ->first();
+            
+        $next = JadwalPosyandu::where('jadwal_id', '>', $jadwal->jadwal_id)
+            ->oldest('jadwal_id')
+            ->first();
+
+        return view('pages.jadwal_posyandu.show', compact('jadwal', 'prev', 'next'));
+    }
+
     public function create()
     {
         return view('pages.jadwal_posyandu.create');

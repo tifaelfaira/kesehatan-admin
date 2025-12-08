@@ -107,11 +107,27 @@
                     <td>{{ $j->tema }}</td>
                     <td>{{ $j->keterangan ?: '-' }}</td>
                     <td>
-                        <a href="{{ route('jadwal.edit', $j->jadwal_id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('jadwal.destroy', $j->jadwal_id) }}" method="POST" class="d-inline">
-                            @csrf @method('DELETE')
-                            <button class="btn btn-danger btn-sm" onclick="return confirm('Hapus data ini?')">Hapus</button>
-                        </form>
+                        <div class="btn-group" role="group">
+                            <a href="{{ route('jadwal.show', $j->jadwal_id) }}" 
+                               class="btn btn-info btn-sm" 
+                               title="Detail">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{{ route('jadwal.edit', $j->jadwal_id) }}" 
+                               class="btn btn-warning btn-sm" 
+                               title="Edit">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <form action="{{ route('jadwal.destroy', $j->jadwal_id) }}" 
+                                  method="POST" 
+                                  class="d-inline"
+                                  onsubmit="return confirm('Hapus data ini?')">
+                                @csrf @method('DELETE')
+                                <button class="btn btn-danger btn-sm" title="Hapus">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             @endforeach

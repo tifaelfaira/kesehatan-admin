@@ -12,20 +12,13 @@ class JadwalPosyandu extends Model
 
     protected $table = 'jadwal_posyandu';
     protected $primaryKey = 'jadwal_id';
-
     protected $fillable = [
         'nama_posyandu',
         'tanggal',
         'tema',
         'keterangan',
-        'poster',
+        'poster'
     ];
-
-    // 🔗 RELASI: 1 Jadwal -> Banyak Layanan Posyandu
-    public function layanan()
-    {
-        return $this->hasMany(LayananPosyandu::class, 'jadwal_id');
-    }
 
     // Scope untuk filter
     public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder
@@ -38,7 +31,7 @@ class JadwalPosyandu extends Model
         return $query;
     }
 
-    // TAMBAH INI: Scope untuk search
+    // Scope untuk search
     public function scopeSearch($query, $request, array $columns)
     {
         if ($request->filled('search')) {
