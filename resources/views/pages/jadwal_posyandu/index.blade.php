@@ -1,3 +1,4 @@
+<!-- resources/views/pages/jadwal_posyandu/index.blade.php -->
 @extends('layouts.admin.app')
 
 @section('content')
@@ -45,21 +46,21 @@
                     </select>
                 </div>
 
-                {{-- TAMBAH INI: Search --}}
+                {{-- Search --}}
                 <div class="col-md-4">
                     <label for="search" class="form-label">Pencarian</label>
                     <div class="input-group">
-                        <input type="text" name="search" class="form-control" 
-                               value="{{ request('search') }}" 
-                               placeholder="Cari nama posyandu, tema, atau keterangan..." 
+                        <input type="text" name="search" class="form-control"
+                               value="{{ request('search') }}"
+                               placeholder="Cari nama posyandu, tema, atau keterangan..."
                                aria-label="Search">
                         <button type="submit" class="input-group-text" id="basic-addon2">
                             <i class="bi bi-search"></i>
                         </button>
                         {{-- Clear Search --}}
                         @if(request('search'))
-                            <a href="{{ request()->fullUrlWithQuery(['search' => null]) }}" 
-                               class="btn btn-outline-secondary ms-2" 
+                            <a href="{{ request()->fullUrlWithQuery(['search' => null]) }}"
+                               class="btn btn-outline-secondary ms-2"
                                id="clear-search">
                                 Clear
                             </a>
@@ -80,7 +81,7 @@
     {{-- Info Hasil Pencarian --}}
     @if(request('search'))
         <div class="alert alert-info mb-3">
-            <i class="bi bi-info-circle"></i> 
+            <i class="bi bi-info-circle"></i>
             Hasil pencarian untuk: <strong>"{{ request('search') }}"</strong>
             <span class="badge bg-primary ms-2">{{ $jadwal->total() }} data ditemukan</span>
         </div>
@@ -95,6 +96,7 @@
                 <th>Nama Posyandu</th>
                 <th>Tema</th>
                 <th>Keterangan</th>
+                <th>File</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -107,19 +109,22 @@
                     <td>{{ $j->tema }}</td>
                     <td>{{ $j->keterangan ?: '-' }}</td>
                     <td>
+                        <span class="badge bg-info">{{ $j->media->count() }} file</span>
+                    </td>
+                    <td>
                         <div class="btn-group" role="group">
-                            <a href="{{ route('jadwal.show', $j->jadwal_id) }}" 
-                               class="btn btn-info btn-sm" 
+                            <a href="{{ route('jadwal.show', $j->jadwal_id) }}"
+                               class="btn btn-info btn-sm"
                                title="Detail">
                                 <i class="bi bi-eye"></i>
                             </a>
-                            <a href="{{ route('jadwal.edit', $j->jadwal_id) }}" 
-                               class="btn btn-warning btn-sm" 
+                            <a href="{{ route('jadwal.edit', $j->jadwal_id) }}"
+                               class="btn btn-warning btn-sm"
                                title="Edit">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
-                            <form action="{{ route('jadwal.destroy', $j->jadwal_id) }}" 
-                                  method="POST" 
+                            <form action="{{ route('jadwal.destroy', $j->jadwal_id) }}"
+                                  method="POST"
                                   class="d-inline"
                                   onsubmit="return confirm('Hapus data ini?')">
                                 @csrf @method('DELETE')

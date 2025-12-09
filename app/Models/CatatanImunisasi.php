@@ -1,4 +1,5 @@
 <?php
+// app/Models/CatatanImunisasi.php
 
 namespace App\Models;
 
@@ -24,6 +25,21 @@ class CatatanImunisasi extends Model
     protected $casts = [
         'tanggal' => 'date',
     ];
+
+    // Relasi ke media
+    public function media()
+    {
+        return $this->hasMany(Media::class, 'ref_id', 'imunisasi_id')
+                    ->where('ref_table', 'catatan_imunisasi')
+                    ->orderBy('sort_order', 'asc')
+                    ->orderBy('created_at', 'asc');
+    }
+
+    // Helper untuk mendapatkan kartu imunisasi utama
+    public function getKartuImunisasiAttribute()
+    {
+        return $this->media->first();
+    }
 
     // Scope untuk filter
     public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder
@@ -62,6 +78,7 @@ class CatatanImunisasi extends Model
                 }
             });
         }
+        return $query;
     }
 
     public function warga()

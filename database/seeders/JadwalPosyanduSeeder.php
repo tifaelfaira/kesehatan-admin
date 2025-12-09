@@ -23,22 +23,17 @@ class JadwalPosyanduSeeder extends Seeder
             'Pemberian Vitamin A', 'Pemeriksaan Kesehatan Gigi', 'Konseling Gizi', 'Pemeriksaan Tumbuh Kembang'
         ];
 
-        $locations = [
-            'Posyandu Mawar', 'Posyandu Melati', 'Posyandu Anggrek', 'Balai Desa',
-            'Puskesmas Pembantu', 'Rumah Ketua RW', 'Lapangan Desa', 'Aula Kantor Desa'
-        ];
-
         $jadwalData = [];
 
         for ($i = 0; $i < 100; $i++) {
             $date = Carbon::now()->addDays(rand(1, 365));
-            
+
             $jadwalData[] = [
                 'nama_posyandu' => $posyanduNames[array_rand($posyanduNames)],
                 'tanggal' => $date->format('Y-m-d'),
                 'tema' => $themes[array_rand($themes)],
                 'keterangan' => 'Kegiatan posyandu rutin bulanan untuk ' . $themes[array_rand($themes)],
-                'poster' => null,
+                // HAPUS BARIS INI: 'poster' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
@@ -53,7 +48,7 @@ class JadwalPosyanduSeeder extends Seeder
             'tanggal' => '2025-05-31',
             'tema' => 'Imunisasi balita',
             'keterangan' => 'kkkk',
-            'poster' => null,
+            // HAPUS BARIS INI: 'poster' => null,
         ]);
 
         JadwalPosyandu::create([
@@ -61,7 +56,7 @@ class JadwalPosyanduSeeder extends Seeder
             'tanggal' => '2025-11-18',
             'tema' => 'Pemeriksaan USG',
             'keterangan' => 'hhjhh',
-            'poster' => null,
+            // HAPUS BARIS INI: 'poster' => null,
         ]);
     }
 }

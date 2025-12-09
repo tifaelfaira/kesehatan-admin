@@ -1,3 +1,4 @@
+<!-- resources/views/pages/user/edit.blade.php -->
 @extends('layouts.admin.app')
 
 @section('title', 'Edit User')
@@ -22,7 +23,7 @@
     </div>
   @endif
 
-  <form action="/admin/user/{{ $user->id }}" method="POST" class="shadow-sm p-4 bg-white rounded">
+  <form action="{{ route('admin.user.update', $user->id) }}" method="POST" class="shadow-sm p-4 bg-white rounded">
     @csrf
     @method('PUT')
 
@@ -30,6 +31,12 @@
       <label>Nama Lengkap</label>
       <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}" required>
       @error('name') <small class="text-danger">{{ $message }}</small> @enderror
+    </div>
+
+    <div class="mb-3">
+      <label>Username</label>
+      <input type="text" name="username" class="form-control" value="{{ old('username', $user->username) }}" required>
+      @error('username') <small class="text-danger">{{ $message }}</small> @enderror
     </div>
 
     <div class="mb-3">
@@ -41,8 +48,11 @@
     <div class="mb-3">
       <label>Role</label>
       <select name="role" class="form-control" required>
-        <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-        <option value="guest" {{ old('role', $user->role) == 'guest' ? 'selected' : '' }}>Guest</option>
+        @foreach($roles as $role)
+          <option value="{{ $role }}" {{ old('role', $user->role) == $role ? 'selected' : '' }}>
+            {{ ucfirst(str_replace('_', ' ', $role)) }}
+          </option>
+        @endforeach
       </select>
       @error('role') <small class="text-danger">{{ $message }}</small> @enderror
     </div>
@@ -54,10 +64,13 @@
       @error('password') <small class="text-danger">{{ $message }}</small> @enderror
     </div>
 
-    {{-- HAPUS: Bagian input Foto Profil --}}
+    <div class="mb-3">
+      <label>Konfirmasi Password</label>
+      <input type="password" name="password_confirmation" class="form-control">
+    </div>
 
     <button type="submit" class="btn btn-warning">Update</button>
-    <a href="/admin/user" class="btn btn-secondary">Kembali</a>
+    <a href="{{ route('admin.user.index') }}" class="btn btn-secondary">Kembali</a>
   </form>
 </div>
 @endsection

@@ -1,36 +1,51 @@
 <?php
+// database/seeders/CreateFirstUserSeeder.php
 
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
 
-class CreateFirstUserSeeder extends Seeder
+// UBAH NAMA CLASS DI SINI:
+class CreateFirstUserSeeder extends Seeder  // <-- DIUBAH
 {
     public function run(): void
     {
-        // Hapus semua user existing
-        DB::table('users')->delete();
-
-        // Buat user admin - TAMBAH ROLE
+        // Super Admin
         User::create([
-            'name' => 'Administrator',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password123'),
-            'role' => 'admin', // TAMBAH INI
-            'created_at' => now(),
-            'updated_at' => now(),
+            'name' => 'Super Admin',
+            'username' => 'superadmin',
+            'email' => 'superadmin@binadesa.com',
+            'password' => Hash::make('Super123'),
+            'role' => 'super_admin',
         ]);
 
-        // Buat 100 user biasa menggunakan factory
-        User::factory()->count(100)->create();
+        // Admin
+        User::create([
+            'name' => 'Admin Utama',
+            'username' => 'admin',
+            'email' => 'admin@binadesa.com',
+            'password' => Hash::make('Admin123'),
+            'role' => 'admin',
+        ]);
 
-        $this->command->info('User admin dan 100 data user berhasil dibuat!');
-        $this->command->info('Email admin: admin@example.com');
-        $this->command->info('Password admin: password123');
-        $this->command->info('Password user biasa: password');
-        $this->command->info('Total user: ' . User::count());
+        // Petugas
+        User::create([
+            'name' => 'Petugas Posyandu',
+            'username' => 'petugas',
+            'email' => 'petugas@binadesa.com',
+            'password' => Hash::make('Petugas123'),
+            'role' => 'petugas',
+        ]);
+
+        // Petugas 2
+        User::create([
+            'name' => 'Budi Santoso',
+            'username' => 'budi',
+            'email' => 'budi@binadesa.com',
+            'password' => Hash::make('Budi123'),
+            'role' => 'petugas',
+        ]);
     }
 }

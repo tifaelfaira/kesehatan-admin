@@ -14,7 +14,6 @@ return new class extends Migration
             $table->date('tanggal');
             $table->string('tema', 200);
             $table->text('keterangan')->nullable();
-            $table->string('poster')->nullable();
             $table->timestamps();
         });
     }

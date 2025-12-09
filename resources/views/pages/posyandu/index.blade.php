@@ -1,3 +1,4 @@
+<!-- resources/views/pages/posyandu/index.blade.php -->
 @extends('layouts.admin.app')
 
 @section('content')
@@ -29,17 +30,17 @@
             <form method="GET" action="{{ route('admin.posyandu.index') }}" class="row g-3">
                 <div class="col-md-4">
                     <label class="form-label">Nama Posyandu</label>
-                    <input type="text" 
-                           name="nama" 
-                           class="form-control" 
+                    <input type="text"
+                           name="nama"
+                           class="form-control"
                            placeholder="Cari nama posyandu..."
                            value="{{ request('nama') }}">
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Alamat</label>
-                    <input type="text" 
-                           name="alamat" 
-                           class="form-control" 
+                    <input type="text"
+                           name="alamat"
+                           class="form-control"
                            placeholder="Cari alamat..."
                            value="{{ request('alamat') }}">
                 </div>
@@ -60,8 +61,8 @@
     {{-- Info Hasil --}}
     @if(request()->anyFilled(['nama', 'alamat']))
         <div class="alert alert-info mb-3">
-            <i class="bi bi-info-circle"></i> 
-            Hasil pencarian untuk: 
+            <i class="bi bi-info-circle"></i>
+            Hasil pencarian untuk:
             @if(request('nama')) <strong>Nama: "{{ request('nama') }}"</strong> @endif
             @if(request('alamat')) <strong>Alamat: "{{ request('alamat') }}"</strong> @endif
             <span class="badge bg-primary ms-2">{{ $posyandu->total() }} data ditemukan</span>
@@ -85,6 +86,7 @@
                             <th>Alamat</th>
                             <th>RT/RW</th>
                             <th>Kontak</th>
+                            <th>File</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -93,15 +95,33 @@
                         <tr>
                             <td class="text-center">{{ ($posyandu->currentPage() - 1) * $posyandu->perPage() + $key + 1 }}</td>
                             <td>
-                                @if($item->foto)
-                                    <img src="{{ Storage::url($item->foto) }}" 
-                                         alt="{{ $item->nama }}" 
-                                         class="rounded" 
-                                         width="50" 
-                                         height="50"
-                                         style="object-fit: cover;">
+                                @if($item->media->first())
+                                    @php
+                                        $firstMedia = $item->media->first();
+                                    @endphp
+                                    @if($firstMedia->is_image)
+                                        <img src="{{ $firstMedia->file_url }}"
+                                             alt="{{ $item->nama }}"
+                                             class="rounded"
+                                             width="50"
+                                             height="50"
+                                             style="object-fit: cover;">
+                                    @else
+                                        <div class="bg-secondary text-white rounded d-flex align-items-center justify-content-center"
+                                             style="width:50px; height:50px;">
+                                            @if($firstMedia->is_pdf)
+                                                <i class="bi bi-file-earmark-pdf"></i>
+                                            @elseif(strpos($firstMedia->mime_type, 'word') !== false)
+                                                <i class="bi bi-file-earmark-word"></i>
+                                            @elseif(strpos($firstMedia->mime_type, 'excel') !== false)
+                                                <i class="bi bi-file-earmark-excel"></i>
+                                            @else
+                                                <i class="bi bi-file-earmark"></i>
+                                            @endif
+                                        </div>
+                                    @endif
                                 @else
-                                    <div class="bg-secondary text-white rounded d-flex align-items-center justify-content-center" 
+                                    <div class="bg-secondary text-white rounded d-flex align-items-center justify-content-center"
                                          style="width:50px; height:50px;">
                                         <i class="bi bi-house"></i>
                                     </div>
@@ -117,18 +137,21 @@
                                 @endif
                             </td>
                             <td>{{ $item->kontak ?: '-' }}</td>
+                            <td>
+                                <span class="badge bg-info">{{ $item->media->count() }} file</span>
+                            </td>
                             <td class="text-center">
                                 <div class="btn-group btn-group-sm" role="group">
-                                    <a href="{{ route('admin.posyandu.show', $item->posyandu_id) }}" 
+                                    <a href="{{ route('admin.posyandu.show', $item->posyandu_id) }}"
                                        class="btn btn-info" title="Detail">
                                         <i class="bi bi-eye"></i>
                                     </a>
-                                    <a href="{{ route('admin.posyandu.edit', $item->posyandu_id) }}" 
+                                    <a href="{{ route('admin.posyandu.edit', $item->posyandu_id) }}"
                                        class="btn btn-warning" title="Edit">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
-                                    <form action="{{ route('admin.posyandu.destroy', $item->posyandu_id) }}" 
-                                          method="POST" 
+                                    <form action="{{ route('admin.posyandu.destroy', $item->posyandu_id) }}"
+                                          method="POST"
                                           onsubmit="return confirm('Hapus posyandu ini?')">
                                         @csrf
                                         @method('DELETE')
@@ -141,7 +164,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="text-center py-4">
+                            <td colspan="8" class="text-center py-4">
                                 <i class="bi bi-house-x text-muted" style="font-size: 3rem;"></i>
                                 <p class="mt-2 text-muted">Belum ada data posyandu</p>
                                 <a href="{{ route('admin.posyandu.create') }}" class="btn btn-primary btn-sm">
@@ -154,7 +177,7 @@
                 </table>
             </div>
         </div>
-        
+
         {{-- Pagination --}}
         @if($posyandu->hasPages())
         <div class="card-footer">

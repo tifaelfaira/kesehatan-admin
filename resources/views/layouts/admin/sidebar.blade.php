@@ -24,7 +24,7 @@
 
             <!-- DASHBOARD -->
             <div class="menu-item">
-                <a href="{{ route('admin.dashboard') }}" 
+                <a href="{{ route('admin.dashboard') }}"
                    class="menu-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
                     <i class="bi bi-house"></i>
                     <span>Dashboard</span>
@@ -36,7 +36,7 @@
                 <small class="section-label">Fitur Utama</small>
 
                 <div class="menu-item">
-                    <a href="{{ route('jadwal.index') }}" 
+                    <a href="{{ route('jadwal.index') }}"
                        class="menu-link {{ request()->is('admin/jadwal*') ? 'active' : '' }}">
                         <i class="bi bi-calendar-check"></i>
                         <span>Jadwal Posyandu</span>
@@ -53,7 +53,7 @@
 
                 <!-- TAMBAHAN: Menu Data Posyandu -->
                 <div class="menu-item">
-                    <a href="{{ route('admin.posyandu.index') }}" 
+                    <a href="{{ route('admin.posyandu.index') }}"
                        class="menu-link {{ request()->is('admin/posyandu*') ? 'active' : '' }}">
                         <i class="bi bi-clipboard-plus"></i>
                         <span>Data Posyandu</span>
@@ -62,7 +62,7 @@
 
                 <!-- TAMBAHAN: Menu Catatan Imunisasi -->
                 <div class="menu-item">
-                    <a href="{{ route('admin.catatan-imunisasi.index') }}" 
+                    <a href="{{ route('admin.catatan-imunisasi.index') }}"
                        class="menu-link {{ request()->is('admin/catatan-imunisasi*') ? 'active' : '' }}">
                         <i class="bi bi-file-medical"></i>
                         <span>Catatan Imunisasi</span>
@@ -75,7 +75,7 @@
                 <small class="section-label">Master Data</small>
 
                 <div class="menu-item">
-                    <a href="{{ route('user.index') }}" 
+                    <a href="{{ route('user.index') }}"
                        class="menu-link {{ request()->is('admin/user*') ? 'active' : '' }}">
                         <i class="bi bi-person-badge"></i>
                         <span>Data User</span>
@@ -83,7 +83,7 @@
                 </div>
 
                 <div class="menu-item">
-                    <a href="{{ route('warga.index') }}" 
+                    <a href="{{ route('warga.index') }}"
                        class="menu-link {{ request()->is('admin/warga*') ? 'active' : '' }}">
                         <i class="bi bi-people"></i>
                         <span>Data Warga</span>

@@ -1,3 +1,4 @@
+<!-- resources/views/pages/jadwal_posyandu/show.blade.php -->
 @extends('layouts.admin.app')
 
 @section('content')
@@ -28,7 +29,7 @@
                 </div>
                 <div class="card-body">
                     <h4 class="text-primary mb-3">{{ $jadwal->nama_posyandu }}</h4>
-                    
+
                     <div class="row mb-4">
                         <div class="col-md-6">
                             <div class="d-flex align-items-center mb-3">
@@ -110,32 +111,81 @@
             </div>
         </div>
 
-        {{-- Kolom Kanan: Poster dan Aksi --}}
+        {{-- Kolom Kanan: File dan Aksi --}}
         <div class="col-md-4">
-            {{-- Card Poster/Visual --}}
+            {{-- Card File Pendukung --}}
             <div class="card border-secondary mb-4 shadow-sm">
                 <div class="card-header bg-secondary text-white d-flex align-items-center">
-                    <i class="bi bi-image me-2"></i>
-                    <h5 class="mb-0 fw-semibold">Poster/Visual</h5>
+                    <i class="bi bi-files me-2"></i>
+                    <h5 class="mb-0 fw-semibold">File Pendukung</h5>
+                    @if($jadwal->media->count() > 0)
+                        <span class="badge bg-light text-dark ms-2">{{ $jadwal->media->count() }} file</span>
+                    @endif
                 </div>
-                <div class="card-body text-center">
-                    @if($jadwal->poster)
-                        <img src="{{ $jadwal->poster }}" 
-                             alt="Poster {{ $jadwal->nama_posyandu }}" 
-                             class="img-fluid rounded mb-3 border"
-                             style="max-height: 200px; object-fit: cover;">
-                        <a href="{{ $jadwal->poster }}" target="_blank" class="btn btn-outline-primary btn-sm w-100">
-                            <i class="bi bi-box-arrow-up-right me-1"></i>Lihat Full Size
-                        </a>
-                    @else
-                        <div class="py-4">
-                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
-                                 style="width: 80px; height: 80px;">
-                                <i class="bi bi-image text-muted fs-2"></i>
+                <div class="card-body">
+                    @if($jadwal->media->count() > 0)
+                        <div class="list-group">
+                            @foreach($jadwal->media as $media)
+                            <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    @if($media->is_image)
+                                        <i class="bi bi-image text-primary me-2"></i>
+                                    @elseif($media->is_pdf)
+                                        <i class="bi bi-file-earmark-pdf text-danger me-2"></i>
+                                    @elseif($media->is_word)
+                                        <i class="bi bi-file-earmark-word text-primary me-2"></i>
+                                    @elseif($media->is_excel)
+                                        <i class="bi bi-file-earmark-excel text-success me-2"></i>
+                                    @else
+                                        <i class="bi bi-file-earmark text-secondary me-2"></i>
+                                    @endif
+                                    <div>
+                                        <div class="fw-medium">{{ $media->caption ?: 'File' }}</div>
+                                        <small class="text-muted">{{ $media->file_name }}</small>
+                                    </div>
+                                </div>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{{ $media->file_url }}"
+                                       target="_blank"
+                                       class="btn btn-outline-primary"
+                                       title="Lihat">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ $media->file_url }}"
+                                       download
+                                       class="btn btn-outline-success"
+                                       title="Unduh">
+                                        <i class="bi bi-download"></i>
+                                    </a>
+                                    <form action="{{ route('jadwal.delete-media', ['jadwal_id' => $jadwal->jadwal_id, 'media' => $media->media_id]) }}"
+                                          method="POST"
+                                          class="d-inline"
+                                          onsubmit="return confirm('Hapus file ini?')">
+                                        @csrf
+                                        @method('POST')
+                                        <button type="submit" class="btn btn-outline-danger" title="Hapus">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
-                            <p class="text-muted mb-0">Tidak ada poster tersedia</p>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center py-4">
+                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                 style="width: 80px; height: 80px;">
+                                <i class="bi bi-files text-muted fs-2"></i>
+                            </div>
+                            <p class="text-muted mb-0">Belum ada file pendukung</p>
                         </div>
                     @endif
+
+                    <div class="mt-3">
+                        <a href="{{ route('jadwal.edit', $jadwal->jadwal_id) }}" class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-plus-circle me-1"></i> Tambah/Ubah File
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -147,13 +197,13 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-3">
-                        <a href="{{ route('jadwal.edit', $jadwal->jadwal_id) }}" 
+                        <a href="{{ route('jadwal.edit', $jadwal->jadwal_id) }}"
                            class="btn btn-warning d-flex align-items-center justify-content-center">
                             <i class="bi bi-pencil-square me-2"></i>Edit Jadwal
                         </a>
-                        
-                        <form action="{{ route('jadwal.destroy', $jadwal->jadwal_id) }}" 
-                              method="POST" 
+
+                        <form action="{{ route('jadwal.destroy', $jadwal->jadwal_id) }}"
+                              method="POST"
                               onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')">
                             @csrf
                             @method('DELETE')
@@ -161,7 +211,7 @@
                                 <i class="bi bi-trash me-2"></i>Hapus Jadwal
                             </button>
                         </form>
-                        
+
                         <a href="{{ route('jadwal.create') }}" class="btn btn-outline-primary d-flex align-items-center justify-content-center">
                             <i class="bi bi-plus-circle me-2"></i>Buat Jadwal Baru
                         </a>
@@ -184,7 +234,7 @@
         @else
             <div></div>
         @endif
-        
+
         @if($next)
             <a href="{{ route('jadwal.show', $next->jadwal_id) }}" class="btn btn-outline-secondary d-flex align-items-center">
                 <div class="text-end">
@@ -223,7 +273,7 @@
         background-color: #6c757d !important;
     }
     .bg-warning {
-        background-color: #a4dde7ff !important;
+        background-color: #ffc107 !important;
     }
     .badge {
         border-radius: 20px;
@@ -243,10 +293,13 @@
         border-color: #6c757d !important;
     }
     .border-warning {
-        border-color: #3388afff !important;
+        border-color: #ffc107 !important;
     }
     .shadow-sm {
         box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+    }
+    .list-group-item:hover {
+        background-color: #f8f9fa;
     }
 </style>
 @endsection

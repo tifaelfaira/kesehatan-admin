@@ -1,4 +1,5 @@
 <?php
+// app/Models/Posyandu.php
 
 namespace App\Models;
 
@@ -9,7 +10,24 @@ class Posyandu extends Model
 {
     protected $table = 'posyandu';
     protected $primaryKey = 'posyandu_id';
-    protected $fillable = ['nama', 'alamat', 'rt', 'rw', 'kontak', 'foto']; // TAMBAH 'foto'
+
+    // HAPUS 'foto' dari fillable
+    protected $fillable = ['nama', 'alamat', 'rt', 'rw', 'kontak'];
+
+    // Relasi ke media
+    public function media()
+    {
+        return $this->hasMany(Media::class, 'ref_id', 'posyandu_id')
+                    ->where('ref_table', 'posyandu')
+                    ->orderBy('sort_order', 'asc')
+                    ->orderBy('created_at', 'asc');
+    }
+
+    // Helper untuk mendapatkan foto utama
+    public function getFotoAttribute()
+    {
+        return $this->media->first();
+    }
 
     // Scope untuk filter
     public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder
@@ -32,12 +50,7 @@ class Posyandu extends Model
                 }
             });
         }
-    }
-
-    // Relasi ke kader (jika ada)
-    public function kader()
-    {
-        return $this->hasMany(KaderPosyandu::class, 'posyandu_id', 'posyandu_id');
+        return $query;
     }
 
     // Relasi ke jadwal

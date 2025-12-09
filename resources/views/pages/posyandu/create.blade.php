@@ -1,3 +1,4 @@
+<!-- resources/views/pages/posyandu/create.blade.php -->
 @extends('layouts.admin.app')
 
 @section('content')
@@ -23,7 +24,7 @@
 
     <form action="{{ route('admin.posyandu.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        
+
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-primary text-white">
                 <h5 class="mb-0">
@@ -37,12 +38,12 @@
                             <label for="nama" class="form-label">Nama Posyandu <span class="text-danger">*</span></label>
                             <input type="text" name="nama" value="{{ old('nama') }}" class="form-control" required>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="alamat" class="form-label">Alamat</label>
                             <textarea name="alamat" class="form-control" rows="3">{{ old('alamat') }}</textarea>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -57,32 +58,49 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="kontak" class="form-label">Kontak</label>
                             <input type="text" name="kontak" value="{{ old('kontak') }}" class="form-control">
                         </div>
                     </div>
-                    
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label for="foto" class="form-label">Foto Posyandu</label>
-                            <div class="border rounded p-3 text-center">
-                                <div id="image-preview" class="mb-3" style="display: none;">
-                                    <img id="preview-img" class="img-fluid rounded" 
-                                         style="max-height: 200px; object-fit: cover;">
+                </div>
+
+                <!-- Section Upload Foto -->
+                <div class="mt-4">
+                    <h5 class="mb-3">
+                        <i class="bi bi-images"></i> Upload Foto/Gambar Posyandu
+                    </h5>
+
+                    <div id="file-upload-container">
+                        <div class="file-upload-item mb-3 border rounded p-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">File <small class="text-muted">(Gambar/PDF/DOC/Excel)</small></label>
+                                        <input type="file" name="foto[]" class="form-control" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx">
+                                        <div class="form-text">Maksimal 5MB per file</div>
+                                    </div>
                                 </div>
-                                <input type="file" name="foto" id="foto" class="form-control" 
-                                       accept="image/*" onchange="previewImage(event)">
-                                <small class="text-muted d-block mt-2">
-                                    <i class="bi bi-info-circle"></i> Format: JPEG, PNG, JPG, GIF | Maksimal: 2MB
-                                </small>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Caption/Keterangan</label>
+                                        <input type="text" name="caption[]" class="form-control" placeholder="Contoh: Tampak depan posyandu">
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="image-preview-0" class="mb-3" style="display: none;">
+                                <img id="preview-img-0" class="img-thumbnail" style="max-width: 200px;">
                             </div>
                         </div>
                     </div>
+
+                    <button type="button" id="add-file-btn" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-plus-circle"></i> Tambah File Lain
+                    </button>
                 </div>
             </div>
-            
+
             <div class="card-footer bg-light text-end">
                 <button type="submit" class="btn btn-success">
                     <i class="bi bi-save"></i> Simpan Data
@@ -96,23 +114,93 @@
 </div>
 
 <script>
-function previewImage(event) {
-    const input = event.target;
-    const preview = document.getElementById('preview-img');
-    const previewContainer = document.getElementById('image-preview');
-    
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-            previewContainer.style.display = 'block';
-        }
-        
-        reader.readAsDataURL(input.files[0]);
-    } else {
-        previewContainer.style.display = 'none';
+let fileIndex = 1;
+
+document.getElementById('add-file-btn').addEventListener('click', function() {
+    const container = document.getElementById('file-upload-container');
+    const newItem = document.createElement('div');
+    newItem.className = 'file-upload-item mb-3 border rounded p-3';
+    newItem.innerHTML = `
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">File <small class="text-muted">(Gambar/PDF/DOC/Excel)</small></label>
+                    <input type="file" name="foto[]" class="form-control file-input" data-index="${fileIndex}" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx">
+                    <div class="form-text">Maksimal 5MB per file</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">Caption/Keterangan</label>
+                    <input type="text" name="caption[]" class="form-control" placeholder="Contoh: Tampak depan posyandu">
+                </div>
+            </div>
+        </div>
+        <div id="image-preview-${fileIndex}" class="mb-3" style="display: none;">
+            <img id="preview-img-${fileIndex}" class="img-thumbnail" style="max-width: 200px;">
+        </div>
+        <button type="button" class="btn btn-danger btn-sm remove-file-btn">
+            <i class="bi bi-trash"></i> Hapus File Ini
+        </button>
+    `;
+    container.appendChild(newItem);
+    fileIndex++;
+});
+
+// Event delegation untuk preview gambar dan hapus
+document.addEventListener('click', function(e) {
+    // Handle hapus file
+    if (e.target.closest('.remove-file-btn')) {
+        e.target.closest('.file-upload-item').remove();
     }
-}
+});
+
+// Event delegation untuk preview gambar
+document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('file-input')) {
+        const index = e.target.dataset.index || 0;
+        const file = e.target.files[0];
+        const preview = document.getElementById(`image-preview-${index}`);
+        const previewImg = document.getElementById(`preview-img-${index}`);
+
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.style.display = 'none';
+        }
+    }
+});
+
+// Untuk file input pertama
+document.querySelector('input[name="foto[]"]').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('image-preview-0');
+    const previewImg = document.getElementById('preview-img-0');
+
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.style.display = 'none';
+    }
+});
 </script>
+
+<style>
+.file-upload-item {
+    background-color: #f8f9fa;
+}
+.file-upload-item:hover {
+    background-color: #e9ecef;
+}
+</style>
 @endsection

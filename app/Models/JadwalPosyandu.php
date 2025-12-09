@@ -1,4 +1,5 @@
 <?php
+// app/Models/JadwalPosyandu.php
 
 namespace App\Models;
 
@@ -12,13 +13,29 @@ class JadwalPosyandu extends Model
 
     protected $table = 'jadwal_posyandu';
     protected $primaryKey = 'jadwal_id';
+
+    // HAPUS 'poster' dari fillable
     protected $fillable = [
         'nama_posyandu',
         'tanggal',
         'tema',
-        'keterangan',
-        'poster'
+        'keterangan'
     ];
+
+    // Relasi ke media
+    public function media()
+    {
+        return $this->hasMany(Media::class, 'ref_id', 'jadwal_id')
+                    ->where('ref_table', 'jadwal_posyandu')
+                    ->orderBy('sort_order', 'asc')
+                    ->orderBy('created_at', 'asc');
+    }
+
+    // Helper untuk mendapatkan poster utama
+    public function getPosterAttribute()
+    {
+        return $this->media->first();
+    }
 
     // Scope untuk filter
     public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder
