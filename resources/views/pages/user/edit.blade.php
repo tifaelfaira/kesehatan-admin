@@ -23,7 +23,8 @@
     </div>
   @endif
 
-  <form action="{{ route('admin.user.update', $user->id) }}" method="POST" class="shadow-sm p-4 bg-white rounded">
+  <!-- PERUBAHAN DI SINI: route('user.update') bukan route('admin.user.update') -->
+  <form action="{{ route('user.update', $user->id) }}" method="POST" class="shadow-sm p-4 bg-white rounded">
     @csrf
     @method('PUT')
 
@@ -70,7 +71,8 @@
     </div>
 
     <button type="submit" class="btn btn-warning">Update</button>
-    <a href="{{ route('admin.user.index') }}" class="btn btn-secondary">Kembali</a>
+    <!-- PERUBAHAN DI SINI JUGA: route('user.index') bukan route('admin.user.index') -->
+    <a href="{{ route('user.index') }}" class="btn btn-secondary">Kembali</a>
   </form>
 </div>
 @endsection

@@ -17,7 +17,8 @@
     </div>
   @endif
 
-  <form action="{{ route('admin.user.store') }}" method="POST" class="shadow-sm p-4 bg-white rounded">
+  <!-- PERBAIKAN: route('user.store') bukan route('admin.user.store') -->
+  <form action="{{ route('user.store') }}" method="POST" class="shadow-sm p-4 bg-white rounded">
     @csrf
 
     <div class="mb-3">
@@ -63,7 +64,8 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Simpan</button>
-    <a href="{{ route('admin.user.index') }}" class="btn btn-secondary">Kembali</a>
+    <!-- PERBAIKAN: route('user.index') bukan route('admin.user.index') -->
+    <a href="{{ route('user.index') }}" class="btn btn-secondary">Kembali</a>
   </form>
 </div>
 @endsection

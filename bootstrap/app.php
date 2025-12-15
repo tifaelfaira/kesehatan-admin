@@ -14,10 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-       'checkislogin' => CheckIsLogin::class,
-       'checkrole' => CheckRole::class
-       ]);
-
+            'checkIsLogin' => CheckIsLogin::class,
+            'role' => CheckRole::class  // PERUBAHAN: 'role' bukan 'checkrole'
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

@@ -11,7 +11,8 @@
             </h4>
             <div>
                 <span class="badge bg-success me-2">Total: {{ $users->total() }} User</span>
-                <a href="/admin/user/create" class="btn btn-primary">
+                <!-- PERBAIKAN: route('user.create') bukan URL langsung -->
+                <a href="{{ route('user.create') }}" class="btn btn-primary">
                     <i class="bi bi-person-plus-fill"></i> Tambah User
                 </a>
             </div>
@@ -30,14 +31,16 @@
                 <i class="bi bi-funnel"></i> Filter & Pencarian Data
             </div>
             <div class="card-body">
-                <form method="GET" action="/admin/user" class="row g-3">
+                <!-- PERBAIKAN: action="{{ route('user.index') }}" -->
+                <form method="GET" action="{{ route('user.index') }}" class="row g-3">
                     {{-- Filter Role --}}
                     <div class="col-md-3">
                         <label for="role" class="form-label">Role</label>
                         <select name="role" id="role" class="form-select" onchange="this.form.submit()">
                             <option value="">Semua Role</option>
+                            <option value="super_admin" {{ request('role') == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
                             <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                            <option value="guest" {{ request('role') == 'guest' ? 'selected' : '' }}>Guest</option>
+                            <option value="petugas" {{ request('role') == 'petugas' ? 'selected' : '' }}>Petugas</option>
                         </select>
                     </div>
 
@@ -61,7 +64,8 @@
 
                     {{-- Tombol Reset --}}
                     <div class="col-md-3 d-flex align-items-end">
-                        <a href="/admin/user" class="btn btn-outline-secondary w-100">
+                        <!-- PERBAIKAN: href="{{ route('user.index') }}" -->
+                        <a href="{{ route('user.index') }}" class="btn btn-outline-secondary w-100">
                             <i class="bi bi-arrow-clockwise"></i> Reset
                         </a>
                     </div>
@@ -120,11 +124,13 @@
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <a href="/admin/user/{{ $user->id }}/edit" class="btn btn-sm btn-warning"
+                                        <!-- PERBAIKAN: route('user.edit', $user->id) -->
+                                        <a href="{{ route('user.edit', $user->id) }}" class="btn btn-sm btn-warning"
                                             title="Edit">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <form action="/admin/user/{{ $user->id }}" method="POST" class="d-inline">
+                                        <!-- PERBAIKAN: route('user.destroy', $user->id) -->
+                                        <form action="{{ route('user.destroy', $user->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger"
@@ -141,7 +147,8 @@
                                     <div class="text-center">
                                         <i class="bi bi-people" style="font-size: 3rem;"></i>
                                         <p class="mt-2">Belum ada pengguna terdaftar</p>
-                                        <a href="/admin/user/create" class="btn btn-primary btn-sm">
+                                        <!-- PERBAIKAN: route('user.create') -->
+                                        <a href="{{ route('user.create') }}" class="btn btn-primary btn-sm">
                                             Tambah User Pertama
                                         </a>
                                     </div>

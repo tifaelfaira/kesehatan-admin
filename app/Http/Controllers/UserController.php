@@ -11,19 +11,8 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        // Middleware untuk cek hak akses
-        $this->middleware(function ($request, $next) {
-            $user = Auth::user();
-
-            if (!$user->isSuperAdmin() && !$user->isAdmin()) {
-                abort(403, 'Anda tidak memiliki akses untuk mengelola user.');
-            }
-
-            return $next($request);
-        });
-    }
+    // Constructor dihapus karena sudah dilindungi oleh middleware di route
+    // Middleware 'role:super_admin,admin' di routes/web.php sudah mencukupi
 
     public function index(Request $request)
     {
@@ -73,7 +62,7 @@ class UserController extends Controller
             'role' => $request->role,
         ]);
 
-        return redirect()->route('admin.user.index')
+        return redirect()->route('user.index')
             ->with('success', 'User berhasil ditambahkan!');
     }
 
@@ -135,7 +124,7 @@ class UserController extends Controller
 
         // Tidak boleh menghapus diri sendiri
         if ($currentUser->id === $user->id) {
-            return redirect()->route('admin.user.index')
+            return redirect()->route('user.index')
                 ->with('error', 'Tidak dapat menghapus akun sendiri!');
         }
 
@@ -144,7 +133,7 @@ class UserController extends Controller
 
         $user->delete();
 
-        return redirect()->route('admin.user.index')
+        return redirect()->route('user.index')
             ->with('success', 'User berhasil dihapus!');
     }
 
