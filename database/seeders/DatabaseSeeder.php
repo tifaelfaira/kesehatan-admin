@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -10,24 +9,13 @@ class DatabaseSeeder extends Seeder
     {
         // Seeder user default
         $this->call([
-            \Database\Seeders\CreateFirstUserSeeder::class,
-        ]);
-
-        // Seeder jadwal & warga
-        $this->call([
-            \Database\Seeders\JadwalPosyanduSeeder::class,
-            \Database\Seeders\WargaSeeder::class,
-        ]);
-
-        // Seeder layanan posyandu (menghubungkan jadwal & warga)
-        $this->call([
-            \Database\Seeders\LayananPosyanduSeeder::class,
-        ]);
-
-        // Seeder baru yang ditambahkan
-        $this->call([
-            \Database\Seeders\PosyanduSeeder::class,          // Seeder baru untuk Data Posyandu
-            \Database\Seeders\CatatanImunisasiSeeder::class,  // Seeder baru untuk Catatan Imunisasi
+            PosyanduSeeder::class,
+            KaderPosyanduSeeder::class,
+            JadwalPosyanduSeeder::class,
+            LayananPosyanduSeeder::class,
+            CatatanImunisasiSeeder::class,
+            CreateFirstUserSeeder::class, // tetap bisa dipanggil terakhir atau pertama sesuai kebutuhan
+            WargaSeeder::class,           // optional, tergantung dependensi data
         ]);
     }
 }

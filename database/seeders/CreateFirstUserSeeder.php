@@ -3,10 +3,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class CreateFirstUserSeeder extends Seeder
 {
@@ -20,32 +19,32 @@ class CreateFirstUserSeeder extends Seeder
         // Data user tetap (4 user utama)
         $fixedUsers = [
             [
-                'name' => 'Super Admin',
+                'name'     => 'Super Admin',
                 'username' => 'superadmin',
-                'email' => 'superadmin@binadesa.com',
+                'email'    => 'superadmin@binadesa.com',
                 'password' => Hash::make('Super123'),
-                'role' => 'super_admin',
+                'role'     => 'super_admin',
             ],
             [
-                'name' => 'Admin Utama',
+                'name'     => 'Admin Utama',
                 'username' => 'admin',
-                'email' => 'admin@binadesa.com',
+                'email'    => 'admin@binadesa.com',
                 'password' => Hash::make('Admin123'),
-                'role' => 'admin',
+                'role'     => 'admin',
             ],
             [
-                'name' => 'Petugas Posyandu',
+                'name'     => 'Petugas Posyandu',
                 'username' => 'petugas',
-                'email' => 'petugas@binadesa.com',
+                'email'    => 'petugas@binadesa.com',
                 'password' => Hash::make('Petugas123'),
-                'role' => 'petugas',
+                'role'     => 'petugas',
             ],
             [
-                'name' => 'Budi Santoso',
+                'name'     => 'Budi Santoso',
                 'username' => 'budi',
-                'email' => 'budi@binadesa.com',
+                'email'    => 'budi@binadesa.com',
                 'password' => Hash::make('Budi123'),
-                'role' => 'petugas',
+                'role'     => 'petugas',
             ],
         ];
 
@@ -58,7 +57,7 @@ class CreateFirstUserSeeder extends Seeder
         }
 
         // Data dummy untuk 96 user tambahan
-        $roles = ['petugas', 'admin', 'super_admin'];
+        $roles       = ['petugas', 'admin', 'super_admin'];
         $roleWeights = ['petugas' => 70, 'admin' => 20, 'super_admin' => 10]; // persentase
 
         $firstNames = [
@@ -66,7 +65,7 @@ class CreateFirstUserSeeder extends Seeder
             'Kartika', 'Lina', 'Mulyadi', 'Nina', 'Oki', 'Putri', 'Rina', 'Sari', 'Tono', 'Umi',
             'Wawan', 'Yuli', 'Zainal', 'Andi', 'Bayu', 'Cici', 'Dian', 'Eka', 'Farhan', 'Gina',
             'Hendra', 'Ika', 'Joni', 'Kiki', 'Lia', 'Mega', 'Nanda', 'Opi', 'Puji', 'Qori',
-            'Rizki', 'Siska', 'Tika', 'Ujang', 'Vina', 'Wati', 'Yoga', 'Zara', 'Asep', 'Bambang'
+            'Rizki', 'Siska', 'Tika', 'Ujang', 'Vina', 'Wati', 'Yoga', 'Zara', 'Asep', 'Bambang',
         ];
 
         $lastNames = [
@@ -74,26 +73,26 @@ class CreateFirstUserSeeder extends Seeder
             'Dewi', 'Lestari', 'Kusumawati', 'Purnama', 'Surya', 'Gunawan', 'Rahman', 'Maulana', 'Firmansyah', 'Ramadan',
             'Hidayat', 'Kurnia', 'Sari', 'Wulandari', 'Saputri', 'Pertiwi', 'Handayani', 'Mulyani', 'Utami', 'Anggraini',
             'Susanti', 'Wahyuni', 'Rahayu', 'Indriani', 'Puspitasari', 'Ningrum', 'Fitriani', 'Astuti', 'Kartika', 'Marlina',
-            'Halim', 'Perdana', 'Kusnadi', 'Hartono', 'Sihombing', 'Sinaga', 'Siregar', 'Lubis', 'Nasution', 'Ginting'
+            'Halim', 'Perdana', 'Kusnadi', 'Hartono', 'Sihombing', 'Sinaga', 'Siregar', 'Lubis', 'Nasution', 'Ginting',
         ];
 
         // Generate 96 user tambahan
         for ($i = 1; $i <= 96; $i++) {
             $firstName = $firstNames[array_rand($firstNames)];
-            $lastName = $lastNames[array_rand($lastNames)];
-            $name = $firstName . ' ' . $lastName;
-            $username = strtolower($firstName . $i);
-            $email = strtolower($firstName . $i . '@binadesa.com');
-            
+            $lastName  = $lastNames[array_rand($lastNames)];
+            $name      = $firstName . ' ' . $lastName;
+            $username  = strtolower($firstName . $i);
+            $email     = strtolower($firstName . $i . '@binadesa.com');
+
             // Tentukan role berdasarkan weight
             $role = $this->getRandomRole($roleWeights);
-            
+
             $users[] = [
-                'name' => $name,
-                'username' => $username,
-                'email' => $email,
-                'password' => Hash::make('Password123'), // Password default
-                'role' => $role,
+                'name'       => $name,
+                'username'   => $username,
+                'email'      => $email,
+                'password'   => Hash::make('Password123'), // Password default
+                'role'       => $role,
                 'created_at' => now()->subDays(rand(0, 365)), // Random date dalam 1 tahun terakhir
                 'updated_at' => now(),
             ];
@@ -103,10 +102,10 @@ class CreateFirstUserSeeder extends Seeder
         User::insert($users);
 
         // Tampilkan informasi
-        $totalUsers = count($users);
+        $totalUsers      = count($users);
         $superAdminCount = count(array_filter($users, fn($user) => $user['role'] === 'super_admin'));
-        $adminCount = count(array_filter($users, fn($user) => $user['role'] === 'admin'));
-        $petugasCount = count(array_filter($users, fn($user) => $user['role'] === 'petugas'));
+        $adminCount      = count(array_filter($users, fn($user) => $user['role'] === 'admin'));
+        $petugasCount    = count(array_filter($users, fn($user) => $user['role'] === 'petugas'));
 
         $this->command->info("Seeder berhasil dijalankan!");
         $this->command->info("Total user: {$totalUsers}");
@@ -121,16 +120,16 @@ class CreateFirstUserSeeder extends Seeder
     private function getRandomRole(array $weights): string
     {
         $totalWeight = array_sum($weights);
-        $random = rand(1, $totalWeight);
-        $current = 0;
-        
+        $random      = rand(1, $totalWeight);
+        $current     = 0;
+
         foreach ($weights as $role => $weight) {
             $current += $weight;
             if ($random <= $current) {
                 return $role;
             }
         }
-        
+
         return 'petugas'; // fallback
     }
 }

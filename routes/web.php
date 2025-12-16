@@ -1,15 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CatatanImunisasiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JadwalPosyanduController;
+use App\Http\Controllers\KaderPosyanduController;
 use App\Http\Controllers\KesehatanController;
-use App\Http\Controllers\WargaController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\LayananPosyanduController;
 use App\Http\Controllers\PosyanduController;
-use App\Http\Controllers\CatatanImunisasiController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\WargaController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,65 +73,68 @@ Route::middleware(['checkIsLogin'])->prefix('admin')->group(function () {
 
             Route::post('/{jadwal_id}/media/{media}/delete',
                 [JadwalPosyanduController::class, 'deleteMedia'])->name('jadwal.delete-media');
+
+            Route::resource('admin/kader-posyandu', KaderPosyanduController::class)
+                ->names('admin.kader-posyandu');
         });
 
         // ---- LAYANAN POSYANDU ----
         Route::resource('layanan-posyandu', LayananPosyanduController::class)->names([
-            'index' => 'admin.layanan-posyandu.index',
-            'create' => 'admin.layanan-posyandu.create',
-            'store' => 'admin.layanan-posyandu.store',
-            'show' => 'admin.layanan-posyandu.show',
-            'edit' => 'admin.layanan-posyandu.edit',
-            'update' => 'admin.layanan-posyandu.update',
+            'index'   => 'admin.layanan-posyandu.index',
+            'create'  => 'admin.layanan-posyandu.create',
+            'store'   => 'admin.layanan-posyandu.store',
+            'show'    => 'admin.layanan-posyandu.show',
+            'edit'    => 'admin.layanan-posyandu.edit',
+            'update'  => 'admin.layanan-posyandu.update',
             'destroy' => 'admin.layanan-posyandu.destroy',
         ]);
 
         // ---- POSYANDU ----
         Route::resource('posyandu', PosyanduController::class)->names([
-            'index' => 'admin.posyandu.index',
-            'create' => 'admin.posyandu.create',
-            'store' => 'admin.posyandu.store',
-            'show' => 'admin.posyandu.show',
-            'edit' => 'admin.posyandu.edit',
-            'update' => 'admin.posyandu.update',
+            'index'   => 'admin.posyandu.index',
+            'create'  => 'admin.posyandu.create',
+            'store'   => 'admin.posyandu.store',
+            'show'    => 'admin.posyandu.show',
+            'edit'    => 'admin.posyandu.edit',
+            'update'  => 'admin.posyandu.update',
             'destroy' => 'admin.posyandu.destroy',
         ]);
 
         // ---- CATATAN IMUNISASI ----
         Route::resource('catatan-imunisasi', CatatanImunisasiController::class)->names([
-            'index' => 'admin.catatan-imunisasi.index',
-            'create' => 'admin.catatan-imunisasi.create',
-            'store' => 'admin.catatan-imunisasi.store',
-            'show' => 'admin.catatan-imunisasi.show',
-            'edit' => 'admin.catatan-imunisasi.edit',
-            'update' => 'admin.catatan-imunisasi.update',
+            'index'   => 'admin.catatan-imunisasi.index',
+            'create'  => 'admin.catatan-imunisasi.create',
+            'store'   => 'admin.catatan-imunisasi.store',
+            'show'    => 'admin.catatan-imunisasi.show',
+            'edit'    => 'admin.catatan-imunisasi.edit',
+            'update'  => 'admin.catatan-imunisasi.update',
             'destroy' => 'admin.catatan-imunisasi.destroy',
         ]);
 
         // Tambahkan route khusus untuk delete media
-Route::delete('catatan-imunisasi/{id}/media/{media}', 
-    [CatatanImunisasiController::class, 'deleteMedia']
-)->name('admin.catatan-imunisasi.delete-media');
+        Route::delete('catatan-imunisasi/{id}/media/{media}',
+            [CatatanImunisasiController::class, 'deleteMedia']
+        )->name('admin.catatan-imunisasi.delete-media');
 
         // ---- WARGA ----
         Route::resource('warga', WargaController::class)->names([
-            'index' => 'warga.index',
-            'create' => 'warga.create',
-            'store' => 'warga.store',
-            'show' => 'warga.show',
-            'edit' => 'warga.edit',
-            'update' => 'warga.update',
+            'index'   => 'warga.index',
+            'create'  => 'warga.create',
+            'store'   => 'warga.store',
+            'show'    => 'warga.show',
+            'edit'    => 'warga.edit',
+            'update'  => 'warga.update',
             'destroy' => 'warga.destroy',
         ]);
 
         // ---- DATA KESEHATAN ----
         Route::resource('kesehatan', KesehatanController::class)->names([
-            'index' => 'kesehatan.index',
-            'create' => 'kesehatan.create',
-            'store' => 'kesehatan.store',
-            'show' => 'kesehatan.show',
-            'edit' => 'kesehatan.edit',
-            'update' => 'kesehatan.update',
+            'index'   => 'kesehatan.index',
+            'create'  => 'kesehatan.create',
+            'store'   => 'kesehatan.store',
+            'show'    => 'kesehatan.show',
+            'edit'    => 'kesehatan.edit',
+            'update'  => 'kesehatan.update',
             'destroy' => 'kesehatan.destroy',
         ]);
     });

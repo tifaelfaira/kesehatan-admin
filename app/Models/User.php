@@ -1,5 +1,4 @@
 <?php
-// app/Models/User.php
 
 namespace App\Models;
 
@@ -33,7 +32,28 @@ class User extends Authenticatable
         ];
     }
 
-    // Cek role
+    public function media()
+    {
+        return $this->hasMany(Media::class, 'ref_id')
+            ->where('ref_table', 'users')
+            ->orderBy('sort_order');
+    }
+
+    public function profilePhoto()
+    {
+        return $this->hasOne(Media::class, 'ref_id')
+            ->where('ref_table', 'users');
+    }
+
+    public function getProfilePhotoUrlAttribute()
+    {
+        if ($this->profilePhoto) {
+            return asset('storage/media/'.$this->profilePhoto->file_name);
+        }
+
+        return asset('assets/images/avatar-placeholder.jpeg');
+    }
+
     public function isSuperAdmin(): bool
     {
         return $this->role === 'super_admin';
@@ -49,7 +69,6 @@ class User extends Authenticatable
         return $this->role === 'petugas';
     }
 
-    // Scope untuk filter
     public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder
     {
         foreach ($filterableColumns as $column) {
@@ -60,7 +79,6 @@ class User extends Authenticatable
         return $query;
     }
 
-    // Scope untuk search
     public function scopeSearch($query, $request, array $columns)
     {
         if ($request->filled('search')) {

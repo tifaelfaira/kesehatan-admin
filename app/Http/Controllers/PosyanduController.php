@@ -42,42 +42,48 @@ class PosyanduController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:100',
-            'alamat' => 'nullable|string',
-            'rt' => 'nullable|string|max:5',
-            'rw' => 'nullable|string|max:5',
-            'kontak' => 'nullable|string|max:20',
-            'foto.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx,xls,xlsx|max:5120',
-            'caption.*' => 'nullable|string|max:255',
+            'nama'        => 'required|string|max:100',
+            'alamat'      => 'nullable|string',
+            'rt'          => 'nullable|string|max:5',
+            'rw'          => 'nullable|string|max:5',
+            'kontak'      => 'nullable|string|max:20',
+            'foto.*'      => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx,xls,xlsx|max:5120',
+            'caption.*'   => 'nullable|string|max:255',
         ]);
 
         // Simpan data posyandu
-        $posyandu = Posyandu::create($request->only(['nama', 'alamat', 'rt', 'rw', 'kontak']));
+        $posyandu = Posyandu::create(
+            $request->only(['nama', 'alamat', 'rt', 'rw', 'kontak'])
+        );
 
-        // Handle upload file (multiple)
+        // Upload media ke DISK PUBLIC (FIX)
         if ($request->hasFile('foto')) {
             foreach ($request->file('foto') as $index => $file) {
                 if ($file->isValid()) {
-                    // Generate nama file unik
+
                     $fileName = time() . '_' . uniqid() . '_' . $file->getClientOriginalName();
 
-                    // Simpan file ke storage
-                    $path = $file->storeAs('public/media', $fileName);
+                    // ⬇️ PAKSA KE DISK PUBLIC
+                    Storage::disk('public')->putFileAs(
+                        'media',
+                        $file,
+                        $fileName
+                    );
 
-                    // Simpan ke tabel media
                     Media::create([
                         'ref_table' => 'posyandu',
-                        'ref_id' => $posyandu->posyandu_id,
+                        'ref_id'    => $posyandu->posyandu_id,
                         'file_name' => $fileName,
-                        'caption' => $request->caption[$index] ?? null,
+                        'caption'   => $request->caption[$index] ?? null,
                         'mime_type' => $file->getMimeType(),
-                        'sort_order' => $index,
+                        'sort_order'=> $index,
                     ]);
                 }
             }
         }
 
-        return redirect()->route('admin.posyandu.index')
+        return redirect()
+            ->route('admin.posyandu.index')
             ->with('success', 'Data posyandu berhasil ditambahkan.');
     }
 
@@ -88,7 +94,6 @@ class PosyanduController extends Controller
     {
         $posyandu->load('media');
 
-        // Hitung prev dan next
         $prev = Posyandu::where('posyandu_id', '<', $posyandu->posyandu_id)
             ->latest('posyandu_id')
             ->first();
@@ -115,21 +120,23 @@ class PosyanduController extends Controller
     public function update(Request $request, Posyandu $posyandu)
     {
         $request->validate([
-            'nama' => 'required|string|max:100',
-            'alamat' => 'nullable|string',
-            'rt' => 'nullable|string|max:5',
-            'rw' => 'nullable|string|max:5',
-            'kontak' => 'nullable|string|max:20',
-            'foto.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx,xls,xlsx|max:5120',
-            'caption.*' => 'nullable|string|max:255',
+            'nama'                => 'required|string|max:100',
+            'alamat'              => 'nullable|string',
+            'rt'                  => 'nullable|string|max:5',
+            'rw'                  => 'nullable|string|max:5',
+            'kontak'              => 'nullable|string|max:20',
+            'foto.*'              => 'nullable|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx,xls,xlsx|max:5120',
+            'caption.*'           => 'nullable|string|max:255',
             'existing_captions.*' => 'nullable|string|max:255',
-            'delete_media.*' => 'nullable',
+            'delete_media.*'      => 'nullable',
         ]);
 
         // Update data posyandu
-        $posyandu->update($request->only(['nama', 'alamat', 'rt', 'rw', 'kontak']));
+        $posyandu->update(
+            $request->only(['nama', 'alamat', 'rt', 'rw', 'kontak'])
+        );
 
-        // Update caption media yang sudah ada
+        // Update caption media lama
         if ($request->has('existing_captions')) {
             foreach ($request->existing_captions as $mediaId => $caption) {
                 Media::where('media_id', $mediaId)
@@ -139,7 +146,7 @@ class PosyanduController extends Controller
             }
         }
 
-        // Hapus media yang dipilih
+        // Hapus media terpilih (DISK PUBLIC)
         if ($request->has('delete_media')) {
             foreach ($request->delete_media as $mediaId) {
                 $media = Media::where('media_id', $mediaId)
@@ -148,39 +155,41 @@ class PosyanduController extends Controller
                     ->first();
 
                 if ($media) {
-                    // Hapus file dari storage
-                    Storage::delete('public/media/' . $media->file_name);
+                    Storage::disk('public')->delete('media/' . $media->file_name);
                     $media->delete();
                 }
             }
         }
 
-        // Handle upload file baru (multiple)
+        // Upload media baru (DISK PUBLIC)
         if ($request->hasFile('foto')) {
             $existingCount = $posyandu->media()->count();
 
             foreach ($request->file('foto') as $index => $file) {
                 if ($file->isValid()) {
-                    // Generate nama file unik
+
                     $fileName = time() . '_' . uniqid() . '_' . $file->getClientOriginalName();
 
-                    // Simpan file ke storage
-                    $path = $file->storeAs('public/media', $fileName);
+                    Storage::disk('public')->putFileAs(
+                        'media',
+                        $file,
+                        $fileName
+                    );
 
-                    // Simpan ke tabel media
                     Media::create([
                         'ref_table' => 'posyandu',
-                        'ref_id' => $posyandu->posyandu_id,
+                        'ref_id'    => $posyandu->posyandu_id,
                         'file_name' => $fileName,
-                        'caption' => $request->caption[$index] ?? null,
+                        'caption'   => $request->caption[$index] ?? null,
                         'mime_type' => $file->getMimeType(),
-                        'sort_order' => $existingCount + $index,
+                        'sort_order'=> $existingCount + $index,
                     ]);
                 }
             }
         }
 
-        return redirect()->route('admin.posyandu.index')
+        return redirect()
+            ->route('admin.posyandu.index')
             ->with('success', 'Data posyandu berhasil diperbarui.');
     }
 
@@ -189,15 +198,15 @@ class PosyanduController extends Controller
      */
     public function destroy(Posyandu $posyandu)
     {
-        // Hapus semua file media terkait
         foreach ($posyandu->media as $media) {
-            Storage::delete('public/media/' . $media->file_name);
+            Storage::disk('public')->delete('media/' . $media->file_name);
             $media->delete();
         }
 
         $posyandu->delete();
 
-        return redirect()->route('admin.posyandu.index')
+        return redirect()
+            ->route('admin.posyandu.index')
             ->with('success', 'Data posyandu berhasil dihapus.');
     }
 
@@ -206,9 +215,11 @@ class PosyanduController extends Controller
      */
     public function deleteMedia(Posyandu $posyandu, Media $media)
     {
-        // Pastikan media milik posyandu ini
-        if ($media->ref_table === 'posyandu' && $media->ref_id === $posyandu->posyandu_id) {
-            Storage::delete('public/media/' . $media->file_name);
+        if (
+            $media->ref_table === 'posyandu' &&
+            $media->ref_id === $posyandu->posyandu_id
+        ) {
+            Storage::disk('public')->delete('media/' . $media->file_name);
             $media->delete();
 
             return back()->with('success', 'File berhasil dihapus.');

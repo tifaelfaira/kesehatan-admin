@@ -25,7 +25,7 @@
             <!-- DASHBOARD -->
             <div class="menu-item">
                 <a href="{{ route('admin.dashboard') }}"
-                   class="menu-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                    class="menu-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
                     <i class="bi bi-house"></i>
                     <span>Dashboard</span>
                 </a>
@@ -37,7 +37,7 @@
 
                 <div class="menu-item">
                     <a href="{{ route('jadwal.index') }}"
-                       class="menu-link {{ request()->is('admin/jadwal*') ? 'active' : '' }}">
+                        class="menu-link {{ request()->is('admin/jadwal*') ? 'active' : '' }}">
                         <i class="bi bi-calendar-check"></i>
                         <span>Jadwal Posyandu</span>
                     </a>
@@ -45,7 +45,7 @@
 
                 <div class="menu-item">
                     <a href="{{ route('admin.layanan-posyandu.index') }}"
-                       class="menu-link {{ request()->is('admin/layanan-posyandu*') ? 'active' : '' }}">
+                        class="menu-link {{ request()->is('admin/layanan-posyandu*') ? 'active' : '' }}">
                         <i class="bi bi-hospital"></i>
                         <span>Layanan Posyandu</span>
                     </a>
@@ -54,16 +54,25 @@
                 <!-- TAMBAHAN: Menu Data Posyandu -->
                 <div class="menu-item">
                     <a href="{{ route('admin.posyandu.index') }}"
-                       class="menu-link {{ request()->is('admin/posyandu*') ? 'active' : '' }}">
+                        class="menu-link {{ request()->is('admin/posyandu*') ? 'active' : '' }}">
                         <i class="bi bi-clipboard-plus"></i>
                         <span>Data Posyandu</span>
+                    </a>
+                </div>
+
+                <!-- TAMBAHAN: Menu Kader Posyandu -->
+                <div class="menu-item">
+                    <a href="{{ route('admin.kader-posyandu.index') }}"
+                        class="menu-link {{ request()->is('admin/kader-posyandu*') ? 'active' : '' }}">
+                        <i class="bi bi-people-fill"></i>
+                        <span>Kader Posyandu</span>
                     </a>
                 </div>
 
                 <!-- TAMBAHAN: Menu Catatan Imunisasi -->
                 <div class="menu-item">
                     <a href="{{ route('admin.catatan-imunisasi.index') }}"
-                       class="menu-link {{ request()->is('admin/catatan-imunisasi*') ? 'active' : '' }}">
+                        class="menu-link {{ request()->is('admin/catatan-imunisasi*') ? 'active' : '' }}">
                         <i class="bi bi-file-medical"></i>
                         <span>Catatan Imunisasi</span>
                     </a>
@@ -76,7 +85,7 @@
 
                 <div class="menu-item">
                     <a href="{{ route('user.index') }}"
-                       class="menu-link {{ request()->is('admin/user*') ? 'active' : '' }}">
+                        class="menu-link {{ request()->is('admin/user*') ? 'active' : '' }}">
                         <i class="bi bi-person-badge"></i>
                         <span>Data User</span>
                     </a>
@@ -84,7 +93,7 @@
 
                 <div class="menu-item">
                     <a href="{{ route('warga.index') }}"
-                       class="menu-link {{ request()->is('admin/warga*') ? 'active' : '' }}">
+                        class="menu-link {{ request()->is('admin/warga*') ? 'active' : '' }}">
                         <i class="bi bi-people"></i>
                         <span>Data Warga</span>
                     </a>

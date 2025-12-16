@@ -1,78 +1,78 @@
-<!-- resources/views/pages/user/edit.blade.php -->
 @extends('layouts.admin.app')
 
 @section('title', 'Edit User')
 
 @section('content')
 <div class="container">
-  <h4 class="mb-4">✏️ Edit User</h4>
 
-  @if(session('success'))
-    <div class="alert alert-success">
-      {{ session('success') }}
+    <h4 class="mb-3 fw-bold text-primary">
+        <i class="bi bi-pencil"></i> Edit User
+    </h4>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <div class="text-center mb-3">
+                <img src="{{ $user->profile_photo_url }}"
+                     class="rounded-circle"
+                     style="width:150px;height:150px;object-fit:cover;">
+            </div>
+
+            <form action="{{ route('user.update', $user->id) }}"
+                  method="POST"
+                  enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nama</label>
+                        <input type="text" name="name"
+                               class="form-control"
+                               value="{{ $user->name }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username"
+                               class="form-control"
+                               value="{{ $user->username }}" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email"
+                               class="form-control"
+                               value="{{ $user->email }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Role</label>
+                        <select name="role" class="form-select">
+                            <option value="super_admin" {{ $user->role=='super_admin'?'selected':'' }}>Super Admin</option>
+                            <option value="admin" {{ $user->role=='admin'?'selected':'' }}>Admin</option>
+                            <option value="petugas" {{ $user->role=='petugas'?'selected':'' }}>Petugas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Ganti Foto Profil</label>
+                    <input type="file"
+                           name="photo"
+                           class="form-control"
+                           accept="image/*">
+                </div>
+
+                <div class="text-end">
+                    <a href="{{ route('user.index') }}"
+                       class="btn btn-secondary">Batal</a>
+                    <button class="btn btn-primary">Update</button>
+                </div>
+
+            </form>
+        </div>
     </div>
-  @endif
 
-  @if($errors->any())
-    <div class="alert alert-danger">
-      <ul>
-        @foreach($errors->all() as $error)
-          <li>{{ $error }}</li>
-        @endforeach
-      </ul>
-    </div>
-  @endif
-
-  <!-- PERUBAHAN DI SINI: route('user.update') bukan route('admin.user.update') -->
-  <form action="{{ route('user.update', $user->id) }}" method="POST" class="shadow-sm p-4 bg-white rounded">
-    @csrf
-    @method('PUT')
-
-    <div class="mb-3">
-      <label>Nama Lengkap</label>
-      <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}" required>
-      @error('name') <small class="text-danger">{{ $message }}</small> @enderror
-    </div>
-
-    <div class="mb-3">
-      <label>Username</label>
-      <input type="text" name="username" class="form-control" value="{{ old('username', $user->username) }}" required>
-      @error('username') <small class="text-danger">{{ $message }}</small> @enderror
-    </div>
-
-    <div class="mb-3">
-      <label>Email</label>
-      <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required>
-      @error('email') <small class="text-danger">{{ $message }}</small> @enderror
-    </div>
-
-    <div class="mb-3">
-      <label>Role</label>
-      <select name="role" class="form-control" required>
-        @foreach($roles as $role)
-          <option value="{{ $role }}" {{ old('role', $user->role) == $role ? 'selected' : '' }}>
-            {{ ucfirst(str_replace('_', ' ', $role)) }}
-          </option>
-        @endforeach
-      </select>
-      @error('role') <small class="text-danger">{{ $message }}</small> @enderror
-    </div>
-
-    <div class="mb-3">
-      <label>Password (Opsional)</label>
-      <input type="password" name="password" class="form-control">
-      <small class="text-muted">Kosongkan jika tidak ingin mengubah password.</small>
-      @error('password') <small class="text-danger">{{ $message }}</small> @enderror
-    </div>
-
-    <div class="mb-3">
-      <label>Konfirmasi Password</label>
-      <input type="password" name="password_confirmation" class="form-control">
-    </div>
-
-    <button type="submit" class="btn btn-warning">Update</button>
-    <!-- PERUBAHAN DI SINI JUGA: route('user.index') bukan route('admin.user.index') -->
-    <a href="{{ route('user.index') }}" class="btn btn-secondary">Kembali</a>
-  </form>
 </div>
 @endsection

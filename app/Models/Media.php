@@ -1,5 +1,4 @@
 <?php
-// app/Models/Media.php
 
 namespace App\Models;
 
@@ -19,39 +18,21 @@ class Media extends Model
         'file_name',
         'caption',
         'mime_type',
-        'sort_order'
+        'sort_order',
     ];
 
-    // Scope untuk mengambil media berdasarkan tabel dan ID
-    public function scopeForRef($query, $refTable, $refId)
-    {
-        return $query->where('ref_table', $refTable)
-                     ->where('ref_id', $refId)
-                     ->orderBy('sort_order', 'asc')
-                     ->orderBy('created_at', 'asc');
-    }
-
-    // Helper untuk mendapatkan URL file
-    public function getFileUrlAttribute()
+    public function getFileUrlAttribute(): string
     {
         return asset('storage/media/' . $this->file_name);
     }
 
-    // Helper untuk mendapatkan path file
-    public function getFilePathAttribute()
+    public function getFilePathAttribute(): string
     {
         return storage_path('app/public/media/' . $this->file_name);
     }
 
-    // Cek apakah file adalah gambar
-    public function getIsImageAttribute()
+    public function getIsImageAttribute(): bool
     {
-        return strpos($this->mime_type, 'image/') === 0;
-    }
-
-    // Cek apakah file adalah PDF
-    public function getIsPdfAttribute()
-    {
-        return $this->mime_type === 'application/pdf';
+        return str_starts_with($this->mime_type, 'image/');
     }
 }
