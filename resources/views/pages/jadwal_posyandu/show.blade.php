@@ -117,6 +117,7 @@
             {{-- Kolom Kanan: File dan Aksi --}}
             <div class="col-md-4">
                 {{-- Card File Pendukung --}}
+<<<<<<< HEAD
                 <div class="card border-secondary mb-4 shadow-sm">
                     <div class="card-header bg-secondary text-white d-flex align-items-center">
                         <i class="bi bi-files me-2"></i>
@@ -163,42 +164,122 @@
                                 <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
                                     style="width: 80px; height: 80px;">
                                     <i class="bi bi-files text-muted fs-2"></i>
-                                </div>
-                                <p class="text-muted mb-0">Belum ada file pendukung</p>
-                            </div>
-                        @endif
+=======
+<div class="card border-secondary mb-4 shadow-sm">
+    <div class="card-header bg-secondary text-white d-flex align-items-center">
+        <i class="bi bi-files me-2"></i>
+        <h5 class="mb-0 fw-semibold">File Pendukung</h5>
+        @if ($jadwal->media->count() > 0)
+            <span class="badge bg-light text-dark ms-2">
+                {{ $jadwal->media->count() }} file
+            </span>
+        @endif
+    </div>
 
+    <div class="card-body">
+        @if ($jadwal->media->count() > 0)
+            <div class="list-group">
+                @foreach ($jadwal->media as $media)
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            @if ($media->is_image)
+                                <i class="bi bi-image text-primary me-2"></i>
+                            @elseif($media->is_pdf)
+                                <i class="bi bi-file-earmark-pdf text-danger me-2"></i>
+                            @elseif($media->is_word)
+                                <i class="bi bi-file-earmark-word text-primary me-2"></i>
+                            @elseif($media->is_excel)
+                                <i class="bi bi-file-earmark-excel text-success me-2"></i>
+                            @else
+                                <i class="bi bi-file-earmark text-secondary me-2"></i>
+                            @endif
+
+                            <div>
+                                <div class="fw-medium">
+                                    {{ $media->caption ?: 'File' }}
+>>>>>>> 213fcbbfa4fde956e64eb559ebdb1c0808083e18
+                                </div>
+                                <small class="text-muted">
+                                    {{ $media->file_name }}
+                                </small>
+                            </div>
+                        </div>
+
+<<<<<<< HEAD
                         {{-- Tombol Aksi (PINDAH KE SINI) --}}
+=======
+                        {{-- TOMBOL AKSI --}}
+>>>>>>> 213fcbbfa4fde956e64eb559ebdb1c0808083e18
                         <div class="btn-group btn-group-sm">
-                            <a href="{{ $media->file_url }}" target="_blank" class="btn btn-outline-primary"
-                                title="Lihat">
+                            <a href="{{ $media->file_url }}" target="_blank"
+                               class="btn btn-outline-primary" title="Lihat">
                                 <i class="bi bi-eye"></i>
                             </a>
 
+<<<<<<< HEAD
                             <a href="{{ $media->file_url }}" download class="btn btn-outline-success" title="Unduh">
+=======
+                            <a href="{{ $media->file_url }}" download
+                               class="btn btn-outline-success" title="Unduh">
+>>>>>>> 213fcbbfa4fde956e64eb559ebdb1c0808083e18
                                 <i class="bi bi-download"></i>
                             </a>
 
                             <form
                                 action="{{ route('jadwal.delete-media', [
                                     'jadwal_id' => $jadwal->jadwal_id,
+<<<<<<< HEAD
                                     'media' => $media->media_id,
                                 ]) }}"
                                 method="POST" onsubmit="return confirm('Hapus file ini?')">
                                 @csrf
                                 <button type="submit" class="btn btn-outline-danger" title="Hapus">
+=======
+                                    'media' => $media->media_id
+                                ]) }}"
+                                method="POST"
+                                onsubmit="return confirm('Hapus file ini?')">
+                                @csrf
+                                <button type="submit"
+                                    class="btn btn-outline-danger" title="Hapus">
+>>>>>>> 213fcbbfa4fde956e64eb559ebdb1c0808083e18
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>
                         </div>
+<<<<<<< HEAD
                         <div class="mt-3">
                             <a href="{{ route('jadwal.edit', $jadwal->jadwal_id) }}"
                                 class="btn btn-outline-secondary w-100">
                                 <i class="bi bi-plus-circle me-1"></i> Tambah / Ubah File
                             </a>
                         </div>
+=======
+>>>>>>> 213fcbbfa4fde956e64eb559ebdb1c0808083e18
                     </div>
+                @endforeach
+            </div>
+        @else
+            <div class="text-center py-4">
+                <div class="bg-light rounded-circle d-inline-flex
+                            align-items-center justify-content-center mb-3"
+                    style="width: 80px; height: 80px;">
+                    <i class="bi bi-files text-muted fs-2"></i>
                 </div>
+                <p class="text-muted mb-0">Belum ada file pendukung</p>
+            </div>
+        @endif
+
+        <p></p> <div class="btn-group btn-group-sm"> <a href="{{ $media->file_url }}" target="_blank" class="btn btn-outline-primary" title="Lihat"> <i class="bi bi-eye"></i> </a> <a href="{{ $media->file_url }}" download class="btn btn-outline-success" title="Unduh"> <i class="bi bi-download"></i> </a> <form action="{{ route('jadwal.delete-media', ['jadwal_id' => $jadwal->jadwal_id, 'media' => $media->media_id]) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus file ini?')"> @csrf @method('POST') <button type="submit" class="btn btn-outline-danger" title="Hapus"> <i class="bi bi-trash"></i> </button> </form> </div>
+        <div class="mt-3">
+            <a href="{{ route('jadwal.edit', $jadwal->jadwal_id) }}"
+               class="btn btn-outline-secondary w-100">
+                <i class="bi bi-plus-circle me-1"></i>
+                Tambah / Ubah File
+            </a>
+        </div>
+    </div>
+</div>
 
                 {{-- Card Aksi Cepat --}}
                 <div class="card border-warning shadow-sm">
