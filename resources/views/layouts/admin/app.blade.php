@@ -82,7 +82,8 @@
     </div>
 
     <!-- Floating WhatsApp -->
-    <a href="https://wa.me/6281266903256" class="whatsapp-float" target="_blank">
+    <a href="https://wa.me/6281266903256?text=Hay%20Admin%20👋%0AAku%20ingin%20bertanya%20tentang%20layanan%20di%20website%20Kesehatan%20Desa."
+        class="whatsapp-float" target="_blank">
         <i class="bi bi-whatsapp"></i>
     </a>
 

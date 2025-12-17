@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -19,7 +18,7 @@ class KaderPosyanduController extends Controller
     public function create()
     {
         $posyandu = Posyandu::orderBy('nama')->get();
-        $warga = Warga::orderBy('nama')->get();
+        $warga    = Warga::orderBy('nama')->get();
         return view('pages.kader_posyandu.create', compact('posyandu', 'warga'));
     }
 
@@ -27,10 +26,10 @@ class KaderPosyanduController extends Controller
     {
         $request->validate([
             'posyandu_id' => 'required|exists:posyandu,posyandu_id',
-            'warga_id' => 'required|exists:warga,warga_id',
-            'peran' => 'required|string|max:100',
+            'warga_id'    => 'required|exists:warga,warga_id',
+            'peran'       => 'required|string|max:100',
             'mulai_tugas' => 'required|date',
-            'akhir_tugas' => 'nullable|date|after_or_equal:mulai_tugas'
+            'akhir_tugas' => 'nullable|date|after_or_equal:mulai_tugas',
         ]);
 
         KaderPosyandu::create($request->all());
@@ -41,24 +40,33 @@ class KaderPosyanduController extends Controller
 
     public function edit(KaderPosyandu $kader_posyandu)
     {
+        $kader = $kader_posyandu; // alias
+
         $posyandu = Posyandu::orderBy('nama')->get();
-        $warga = Warga::orderBy('nama')->get();
-        return view('pages.kader_posyandu.edit', compact('kader_posyandu', 'posyandu', 'warga'));
+        $warga    = Warga::orderBy('nama')->get();
+
+        return view(
+            'pages.kader_posyandu.edit',
+            compact('kader', 'posyandu', 'warga')
+        );
     }
 
     public function update(Request $request, KaderPosyandu $kader_posyandu)
     {
+        $kader = $kader_posyandu;
+
         $request->validate([
             'posyandu_id' => 'required|exists:posyandu,posyandu_id',
-            'warga_id' => 'required|exists:warga,warga_id',
-            'peran' => 'required|string|max:100',
+            'warga_id'    => 'required|exists:warga,id', // ✅ FIX
+            'peran'       => 'required|string|max:100',
             'mulai_tugas' => 'required|date',
-            'akhir_tugas' => 'nullable|date|after_or_equal:mulai_tugas'
+            'akhir_tugas' => 'nullable|date|after_or_equal:mulai_tugas',
         ]);
 
-        $kader_posyandu->update($request->all());
+        $kader->update($request->all());
 
-        return redirect()->route('admin.kader-posyandu.index')
+        return redirect()
+            ->route('admin.kader-posyandu.index')
             ->with('success', 'Data kader posyandu berhasil diperbarui');
     }
 

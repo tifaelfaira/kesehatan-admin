@@ -122,33 +122,39 @@
                         <i class="bi bi-files me-2"></i>
                         <h5 class="mb-0 fw-semibold">File Pendukung</h5>
                         @if ($jadwal->media->count() > 0)
-                            <span class="badge bg-light text-dark ms-2">{{ $jadwal->media->count() }} file</span>
+                            <span class="badge bg-light text-dark ms-2">
+                                {{ $jadwal->media->count() }} file
+                            </span>
                         @endif
                     </div>
+
                     <div class="card-body">
                         @if ($jadwal->media->count() > 0)
                             <div class="list-group">
                                 @foreach ($jadwal->media as $media)
-                                    <div
-                                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
                                         <div class="d-flex align-items-center">
                                             @if ($media->is_image)
                                                 <i class="bi bi-image text-primary me-2"></i>
-                                            @elseif($media->is_pdf)
+                                            @elseif ($media->is_pdf)
                                                 <i class="bi bi-file-earmark-pdf text-danger me-2"></i>
-                                            @elseif($media->is_word)
+                                            @elseif ($media->is_word)
                                                 <i class="bi bi-file-earmark-word text-primary me-2"></i>
-                                            @elseif($media->is_excel)
+                                            @elseif ($media->is_excel)
                                                 <i class="bi bi-file-earmark-excel text-success me-2"></i>
                                             @else
                                                 <i class="bi bi-file-earmark text-secondary me-2"></i>
                                             @endif
+
                                             <div>
-                                                <div class="fw-medium">{{ $media->caption ?: 'File' }}</div>
-                                                <small class="text-muted">{{ $media->file_name }}</small>
+                                                <div class="fw-medium">
+                                                    {{ $media->caption ?: 'File' }}
+                                                </div>
+                                                <small class="text-muted">
+                                                    {{ $media->file_name }}
+                                                </small>
                                             </div>
                                         </div>
-
                                     </div>
                                 @endforeach
                             </div>
@@ -162,20 +168,24 @@
                             </div>
                         @endif
 
-                        <p></p>
+                        {{-- Tombol Aksi (PINDAH KE SINI) --}}
                         <div class="btn-group btn-group-sm">
                             <a href="{{ $media->file_url }}" target="_blank" class="btn btn-outline-primary"
                                 title="Lihat">
                                 <i class="bi bi-eye"></i>
                             </a>
+
                             <a href="{{ $media->file_url }}" download class="btn btn-outline-success" title="Unduh">
                                 <i class="bi bi-download"></i>
                             </a>
+
                             <form
-                                action="{{ route('jadwal.delete-media', ['jadwal_id' => $jadwal->jadwal_id, 'media' => $media->media_id]) }}"
-                                method="POST" class="d-inline" onsubmit="return confirm('Hapus file ini?')">
+                                action="{{ route('jadwal.delete-media', [
+                                    'jadwal_id' => $jadwal->jadwal_id,
+                                    'media' => $media->media_id,
+                                ]) }}"
+                                method="POST" onsubmit="return confirm('Hapus file ini?')">
                                 @csrf
-                                @method('POST')
                                 <button type="submit" class="btn btn-outline-danger" title="Hapus">
                                     <i class="bi bi-trash"></i>
                                 </button>
@@ -184,7 +194,7 @@
                         <div class="mt-3">
                             <a href="{{ route('jadwal.edit', $jadwal->jadwal_id) }}"
                                 class="btn btn-outline-secondary w-100">
-                                <i class="bi bi-plus-circle me-1"></i> Tambah/Ubah File
+                                <i class="bi bi-plus-circle me-1"></i> Tambah / Ubah File
                             </a>
                         </div>
                     </div>
