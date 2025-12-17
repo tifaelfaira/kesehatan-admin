@@ -95,13 +95,35 @@
                     </div>
 
                     <div class="card-body">
-                        @if ($jadwal->media->count())
+                        @if ($jadwal->media->count() > 0)
                             <div class="list-group">
                                 @foreach ($jadwal->media as $media)
-                                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <strong>{{ $media->caption ?? 'File' }}</strong><br>
-                                            <small class="text-muted">{{ $media->file_name }}</small>
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <div>
+                                                <strong>{{ $media->caption ?? 'File' }}</strong><br>
+                                                <small class="text-muted">{{ $media->file_name }}</small>
+                                            </div>
+                                        </div>
+
+                                        {{-- Tombol Aksi dipindah ke sini --}}
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{{ $media->file_url }}" target="_blank"
+                                                class="btn btn-outline-primary">
+                                                <i class="bi bi-eye"></i> Lihat
+                                            </a>
+                                            <a href="{{ $media->file_url }}" download class="btn btn-outline-success">
+                                                <i class="bi bi-download"></i> Unduh
+                                            </a>
+                                            <form
+                                                action="{{ route('jadwal.delete-media', ['jadwal_id' => $jadwal->jadwal_id, 'media' => $media->media_id]) }}"
+                                                method="POST" onsubmit="return confirm('Hapus file ini?')"
+                                                style="display:inline;">
+                                                @csrf
+                                                <button class="btn btn-outline-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 @endforeach
@@ -110,26 +132,6 @@
                             <p class="text-muted text-center">Belum ada file pendukung</p>
                         @endif
 
-                        <p></p>
-                        <div class="btn-group btn-group-sm">
-                            <a href="{{ $media->file_url }}" target="_blank" class="btn btn-outline-primary">
-                                <i class="bi bi-eye"></i>
-                            </a>
-                            <a href="{{ $media->file_url }}" download class="btn btn-outline-success">
-                                <i class="bi bi-download"></i>
-                            </a>
-                            <form
-                                action="{{ route('jadwal.delete-media', [
-                                    'jadwal_id' => $jadwal->jadwal_id,
-                                    'media' => $media->media_id,
-                                ]) }}"
-                                method="POST" onsubmit="return confirm('Hapus file ini?')">
-                                @csrf
-                                <button class="btn btn-outline-danger">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
-                        </div>
                         <a href="{{ route('jadwal.edit', $jadwal->jadwal_id) }}"
                             class="btn btn-outline-secondary w-100 mt-3">
                             <i class="bi bi-plus-circle me-1"></i> Tambah / Ubah File
